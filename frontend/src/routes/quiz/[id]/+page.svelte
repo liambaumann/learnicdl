@@ -18,6 +18,7 @@
     let selected = $state<number[]>([]); // User's selected answers for current Q
     let score = $state(0);
     let showResult = $state(false);
+    let answerChecked = $state(false); // Track if user has checked the answer
 
     // --- DERIVED ---
     // Cast data.questions to our Interface to fix type errors
@@ -27,6 +28,8 @@
 
     // --- ACTIONS ---
     function toggleOption(optIndex: number) {
+        if (answerChecked) return; // Disable selection after answer is checked
+        
         if (question.type === 'single_choice') {
             // Single Choice: Just select this one
             selected = [optIndex];
@@ -40,18 +43,23 @@
         }
     }
 
-    function nextQuestion() {
+    function checkAnswer() {
+        answerChecked = true;
+        
         // Simple scoring logic: Arrays must match exactly
         const userAns = [...selected].sort().toString();
         const correctAns = [...question.answers].sort().toString();
 
         if (userAns === correctAns) score++;
+    }
 
+    function nextQuestion() {
         if (isLast) {
             showResult = true;
         } else {
             index++;
-            selected = []; // Reset selection for the next question
+            selected = [];
+            answerChecked = false;
         }
     }
 </script>
@@ -105,16 +113,64 @@
                         <button 
                             onclick={() => toggleOption(i)}
                             class="w-full text-left p-4 rounded-lg border-2 transition-all duration-200 flex items-center gap-3
-                            {selected.includes(i) 
-                                ? 'border-indigo-600 bg-indigo-50 text-indigo-900' 
-                                : 'border-gray-200 hover:border-indigo-300 hover:bg-gray-50'}"
+                            {answerChecked 
+                                ? question.answers.includes(i)
+                                    ? 'border-green-500 bg-green-50 text-green-900' 
+                                    : selected.includes(i)
+                                        ? 'border-red-400 bg-red-50 text-red-900'
+                                        : 'border-gray-200'
+                                : selected.includes(i) 
+                                    ? 'border-indigo-600 bg-indigo-50 text-indigo-900' 
+                                    : 'border-gray-200 hover:border-indigo-300 hover:bg-gray-50'}"
+                            disabled={answerChecked}
                         >
-                            <div class="w-5 h-5 rounded-full border flex items-center justify-center
-                                {selected.includes(i) ? 'bg-indigo-600 border-indigo-600' : 'border-gray-300 bg-white'}">
-                                {#if selected.includes(i)}
-                                    <div class="w-2 h-2 bg-white rounded-full"></div>
-                                {/if}
-                            </div>
+                            {#if question.type === 'single_choice'}
+                                <!-- Single Choice: Round radiobutton -->
+                                <div class="w-5 h-5 rounded-full border flex items-center justify-center
+                                    {answerChecked 
+                                        ? question.answers.includes(i)
+                                            ? 'bg-green-500 border-green-500'
+                                            : selected.includes(i)
+                                                ? 'bg-red-400 border-red-400'
+                                                : 'border-gray-300 bg-white'
+                                        : selected.includes(i) ? 'bg-indigo-600 border-indigo-600' : 'border-gray-300 bg-white'}">
+                                    {#if answerChecked && question.answers.includes(i)}
+                                        <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                        </svg>
+                                    {:else if answerChecked && selected.includes(i)}
+                                        <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                        </svg>
+                                    {:else if selected.includes(i)}
+                                        <div class="w-2 h-2 bg-white rounded-full"></div>
+                                    {/if}
+                                </div>
+                            {:else}
+                                <!-- Multiple Choice: Rounded square with checkmark -->
+                                <div class="w-5 h-5 rounded-md border flex items-center justify-center
+                                    {answerChecked 
+                                        ? question.answers.includes(i)
+                                            ? 'bg-green-500 border-green-500'
+                                            : selected.includes(i)
+                                                ? 'bg-red-400 border-red-400'
+                                                : 'border-gray-300 bg-white'
+                                        : selected.includes(i) ? 'bg-indigo-600 border-indigo-600' : 'border-gray-300 bg-white'}">
+                                    {#if answerChecked && question.answers.includes(i)}
+                                        <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                        </svg>
+                                    {:else if answerChecked && selected.includes(i)}
+                                        <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                        </svg>
+                                    {:else if selected.includes(i)}
+                                        <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                        </svg>
+                                    {/if}
+                                </div>
+                            {/if}
                             
                             {opt}
                         </button>
@@ -124,11 +180,13 @@
 
             <div class="bg-gray-50 px-8 py-4 border-t border-gray-100 flex justify-end">
                 <button 
-                    onclick={nextQuestion}
-                    disabled={selected.length === 0}
+                    onclick={answerChecked ? nextQuestion : checkAnswer}
+                    disabled={!answerChecked && selected.length === 0}
                     class="px-6 py-2.5 bg-gray-900 text-white font-medium rounded-lg shadow hover:bg-black disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                 >
-                    {isLast ? 'Finish Quiz' : 'Next Question →'}
+                    {answerChecked 
+                        ? (isLast ? 'Finish Quiz' : 'Next Question →') 
+                        : 'Check Answer'}
                 </button>
             </div>
         </div>
