@@ -2,11 +2,12 @@
 export interface Option {
 	id: string;
 	text: string;
-	isCorrect: boolean;
 }
 
 export interface Question {
+	id: string;
 	text: string;
 	type: 'single_choice' | 'multiple_choice';
 	options: Option[];
+	answers: string[];
 }
