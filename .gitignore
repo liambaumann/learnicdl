@@ -1,4 +1,4 @@
 # PocketBase
-/pocketbase/pb_data/
-/pocketbase/pocketbase
-/pocketbase/pocketbase.exe
+./pocketbase/pb_data/
+./pocketbase/pocketbase
+./pocketbase/pocketbase.exe
