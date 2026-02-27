@@ -39,31 +39,27 @@
         }
     }
 
+    // Parent-owned correctness state and checker
+    let isCorrect = $state<boolean | null>(null);
+
     function checkAnswer() {
-        if (answerChecked) return; // Prevent double scoring if they click twice
+        if (answerChecked) return;
+
+        const correctAns = question.answers as string[];
         answerChecked = true;
 
-        // Extracts an array of string IDs (e.g., ["opt_1", "opt_3"])
-        const correctAns = question.answers;
-        
-        console.log("Question: ", question.text);
-        console.log("Correct Answers IDs: ", $state.snapshot(correctAns));
-        console.log("Selected Answers IDs: ", $state.snapshot(selectedAns));
-
-        // Compares the two arrays regardless of order
-        const isCorrect =
+        isCorrect =
             selectedAns.length === correctAns.length &&
             selectedAns.every((id) => correctAns.includes(id));
-            
-        if (isCorrect) {
-			score++
-		}
+
+        if (isCorrect) score++;
     }
 
     function nextQuestion() {
         index++;
         selectedAns = [];
         answerChecked = false;
+        isCorrect = null;
     }
 </script>
 
@@ -72,10 +68,11 @@
         <QuizResult {score} total={questions.length} />
     {:else if question}
         <QuestionCard
-            {question}
+            question={question}
             selected={selectedAns}
             {answerChecked}
             {isLast}
+            isCorrect={isCorrect}
             onToggle={toggleOption}
             onCheck={checkAnswer}
             onNext={nextQuestion}
