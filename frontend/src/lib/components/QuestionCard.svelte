@@ -1,7 +1,8 @@
 <script lang="ts">
 	import type { Question } from '$lib/types';
-	import OptionRadio from './question/OptionRadio.svelte';
-	import OptionCheckbox from './question/OptionCheckbox.svelte';
+	//import OptionRadio from './question/OptionRadio.svelte';
+	//import OptionCheckbox from './question/OptionCheckbox.svelte';
+	import Option from './question/Option.svelte';
 
 	let {
 		question,
@@ -35,23 +36,14 @@
 
 		<div class="space-y-3">
 			{#each question.options as opt}
-				{#if question.type === 'single_choice'}
-					<OptionRadio
-						{opt}
-						{selected}
-						{answerChecked}
-						questionAnswers={question.answers}
-						onToggle={onToggle}
-					/>
-				{:else}
-					<OptionCheckbox
-						{opt}
-						{selected}
-						{answerChecked}
-						questionAnswers={question.answers}
-						onToggle={onToggle}
-					/>
-				{/if}
+				<Option
+					{opt}
+					{selected}
+					{answerChecked}
+					questionAnswers={question.answers}
+					{onToggle}
+					questionType={question.type}
+				/>
 			{/each}
 		</div>
 	</div>
