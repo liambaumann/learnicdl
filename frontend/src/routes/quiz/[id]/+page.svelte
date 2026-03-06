@@ -63,7 +63,7 @@
     }
 </script>
 
-<div class="max-w-2xl mx-auto p-6">
+<div class="font-montserrat max-w-2xl mx-auto p-6">
     {#if showResult}
         <QuizResult {score} total={questions.length} />
     {:else if question}

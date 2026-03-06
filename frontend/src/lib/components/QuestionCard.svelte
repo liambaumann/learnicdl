@@ -54,7 +54,7 @@
 			disabled={!answerChecked && selected.length === 0}
 			class="px-6 py-2.5 bg-gray-900 text-white font-medium rounded-lg shadow hover:bg-black disabled:opacity-30 disabled:cursor-not-allowed transition-all"
 		>
-			{answerChecked ? (isLast ? 'Finish Quiz' : 'Next Question →') : 'Check Answer'}
+			{answerChecked ? (isLast ? 'Quiz abschließen' : 'Nächste Frage →') : 'Frage überprüfen'}
 		</button>
 	</div>
 </div>

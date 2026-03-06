@@ -5,8 +5,8 @@
     let { data }: { data: PageData } = $props();
 </script>
 
-<div class="max-w-4xl mx-auto py-10 px-4">
-    <h1 class="text-3xl font-bold mb-6">Available Quizzes</h1>
+<div class="font-montserrat max-w-4xl mx-auto py-10 px-4">
+    <h1 class="text-3xl font-bold mb-6">Verfügbare Quizze</h1>
     
     <div class="grid gap-4">
         {#each data.quizzes as quiz}

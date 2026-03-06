@@ -5,7 +5,7 @@
 
 	export let opt: { id: string; text: string };
 	export let selected: string[] = [];
-	export let answerChecked: boolean = false;
+	export let answerChecked: boolean = false;	// Checked: if the user submitted "Check Answer"
 	export let questionAnswers: string[] = [];
 	export let onToggle: (id: string) => void = () => {};
 	export let questionType: 'single_choice' | 'multiple_choice' = 'multiple_choice';
