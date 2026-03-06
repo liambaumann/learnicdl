@@ -7,6 +7,10 @@ declare global {
 		// interface PageData {}
 		// interface PageState {}
 		// interface Platform {}
+		interface Locals {
+			pb: PocketBase;
+			user: import('pocketbase').AuthRecord | undefined;
+		}
 	}
 }
 
