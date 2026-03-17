@@ -7,8 +7,7 @@ export const actions = {
         const password = data.get('password');
 
         try {
-            // This is where the magic happens. 
-            // PocketBase checks the email and the BCrypt hash.
+            // authenticate user in pocketbase
             await locals.pb.collection('users').authWithPassword(email, password);
         } catch (err) {
             console.error('Login error:', err);
@@ -18,7 +17,7 @@ export const actions = {
             });
         }
 
-        // If successful, redirect to the home page (where your quizzes are)
+        // If successful, redirect to the home page (where your modules are)
         throw redirect(303, '/');
     }
 };

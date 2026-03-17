@@ -2,14 +2,14 @@ import { pb } from '$lib/pb';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ params }) => {
-    // 1. Fetch the Quiz details (Title, Description)
-    const quiz = await pb.collection('quizzes').getOne(params.id);
+    // 1. Fetch the Module details (Title, Description)
+    const module = await pb.collection('modules').getOne(params.id);
 
-    // 2. Fetch the Questions linked to this Quiz
+    // 2. Fetch the Questions linked to this Module
     const questions = await pb.collection('questions').getFullList({
-        filter: `quiz = "${params.id}"`,
+        filter: `module = "${params.id}"`,
         sort: 'created'
     });
 
-    return { quiz, questions };
+    return { module, questions };
 };
