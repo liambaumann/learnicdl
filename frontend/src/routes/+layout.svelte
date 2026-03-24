@@ -13,9 +13,9 @@
 </svelte:head>
 
 <nav class="sticky top-2 z-50 mx-auto max-w-4xl px-4 mt-2">
-	<div class="flex items-center justify-center rounded-xl bg-white/80 backdrop-blur-md shadow-sm border border-gray-200 px-4 py-3">
-		<a href="/" class="text-lg font-bold font-montserrat tracking-tight text-primary">
-			<img src={hatblue} alt="LearnICDL Logo" class="inline-block w-10 h-10 mr-2">
+	<div class="flex items-center justify-center border-2 border-primary-300 rounded-xl bg-primary backdrop-blur-md shadow-sm border px-4 py-3">
+		<a href="/" class="text-lg font-bold font-montserrat tracking-tight text-white">
+			<img src={hatwhite} alt="LearnICDL Logo" class="inline-block w-10 h-10 mr-2">
 			LearnICDL
 		</a>
 	</div>

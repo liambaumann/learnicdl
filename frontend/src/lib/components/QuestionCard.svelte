@@ -23,10 +23,12 @@
 		onCheck: () => void;
 		onNext: () => void;
 	} = $props();
+
+	const hasCorrectAnswers = () => question.answers.length > 0;
 </script>
 
-<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-	<div class="p-8">
+<div class="bg-white rounded-xl border-2 border-gray-300 border-b-4 overflow-hidden">
+	<div class="p-5 sm:p-8">
 		<span class="text-xs font-bold tracking-wider text-primary-500 uppercase mb-2 block">
 			{question.type === 'single_choice' ? 'Single Choice' : 'Multiple Choice'}
 		</span>
@@ -48,11 +50,29 @@
 		</div>
 	</div>
 
-	<div class="bg-gray-50 px-8 py-4 border-t border-gray-100 flex justify-end">
+	<div class="px-5 sm:px-8 py-4 border-t border-gray-200 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:justify-end
+	{answerChecked
+		? isCorrect
+			? 'bg-green-100 border-green-300'
+			: 'bg-red-100 border-red-300'
+		: 'bg-gray-100 border-gray-200'}">
+
+		{#if answerChecked}
+			{#if isCorrect}
+				<span class="text-green-700 font-medium sm:mr-auto">Richtig!</span>
+			{:else}
+				<span class="text-red-700 font-medium sm:mr-auto">Nicht Ganz.</span>
+			{/if}
+		{/if}
 		<button
 			onclick={answerChecked ? onNext : onCheck}
-			disabled={!answerChecked && selected.length === 0}
-			class="px-6 py-2.5 bg-gray-900 text-white font-medium rounded-lg shadow hover:bg-black disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+			disabled={!answerChecked && selected.length === 0 && hasCorrectAnswers()}
+			class="w-full sm:w-auto px-6 py-3 sm:py-2.5 text-white font-medium rounded-lg shadow disabled:opacity-30 disabled:cursor-not-allowed transition-all
+			{answerChecked
+				? isCorrect
+					? 'bg-green-500 hover:bg-green-600'
+					: 'bg-red-500 hover:bg-red-600'
+				: 'bg-primary hover:bg-primary-700'}"
 		>
 			{answerChecked ? (isLast ? 'Quiz abschließen' : 'Nächste Frage →') : 'Frage überprüfen'}
 		</button>

@@ -13,12 +13,12 @@
 
 <button
 	onclick={() => onToggle(opt.id)}
-	class="w-full text-left p-4 rounded-lg border-2 transition-all duration-200 flex items-center gap-3
+	class="w-full text-left p-4 rounded-lg border-2 border-b-4 transition-all duration-200 flex items-center gap-3
     {answerChecked
 		? questionAnswers.includes(opt.id)
-			? 'border-green-500 bg-green-50 text-green-900'
+			? 'border-primary-500 bg-primary-50 text-primary-900'
 			: selected.includes(opt.id)
-				? 'border-red-400 bg-red-50 text-red-900'
+				? 'border-red-500 bg-red-50 text-red-900'
 				: 'border-gray-200'
 		: selected.includes(opt.id)
 			? 'border-primary-600 bg-primary-50 text-primary-900'
@@ -30,9 +30,9 @@
       {questionType === 'single_choice' ? 'rounded-full' : 'rounded-md'} 
       {answerChecked
 			? questionAnswers.includes(opt.id)
-				? 'bg-green-500 border-green-500'
+				? 'bg-primary-500 border-primary-500'
 				: selected.includes(opt.id)
-					? 'bg-red-400 border-red-400'
+					? 'bg-red-500 border-red-500'
 					: 'border-gray-300 bg-white'
 			: selected.includes(opt.id)
 				? 'bg-primary-600 border-primary-600'
