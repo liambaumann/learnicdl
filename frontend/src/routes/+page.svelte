@@ -19,12 +19,16 @@
                 <img
                     src="/module_icons/{module.icon}.svg"
                     alt="{module.name} icon"
-                    class="w-12 h-12 md:w-16 md:h-16"
+                    class="w-12 h-12 md:w-16 md:h-16 mr-3 md:mr-1"
                 />
             </div>
             <div class="flex-1">
                 <h2 class="text-xl font-bold text-slate-800">{module.title}</h2>
-                <p class="text-slate-600 line-clamp-2 md:line-clamp-3">{module.description}</p>
+                <!--p class="text-slate-600 line-clamp-2 md:line-clamp-3">{module.description}</p-->
+
+                <span class="text-xs text-slate-400 font-medium uppercase tracking-wider">
+                    Modul
+                </span>
             </div>
             
 			<Icon class="w-6 h-6 text-gray-300 group-hover:text-primary-500 transform transition-none" icon="tabler:chevron-right"/>

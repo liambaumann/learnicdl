@@ -10,4 +10,5 @@ export interface Question {
 	type: 'single_choice' | 'multiple_choice';
 	options: Option[];
 	answers: string[];
+	image?: string;
 }

@@ -79,7 +79,8 @@
 		/>
 	{:else}
 		<div class="text-center p-10">
-			<p class="text-gray-500">Dieses Quiz hat noch keine Fragen.</p>
+			<h1 class="text-gray-500 text-xl">Dieses Quiz hat noch keine Fragen.</h1>
+			<p>Vermutlich wurden sie noch nicht eingebettet. Wir bitten noch um etwas Geduld.</p>
 			<a href="/" class="text-blue-600 hover:underline mt-4 inline-block">Zurück</a>
 		</div>
 	{/if}

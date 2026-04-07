@@ -35,6 +35,13 @@
 		<h3 class="text-xl font-medium text-gray-900 mb-6">
 			{question.text}
 		</h3>
+		{#if question.image}
+			<img
+				src={question.image}
+				alt="Frage Bild"
+				class="mx-auto rounded-lg mb-6 max-h-64 object-cover"
+			/>
+		{/if}
 
 		<div class="space-y-3">
 			{#each question.options as opt}
