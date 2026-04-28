@@ -7,19 +7,26 @@
 	let { data }: { data: PageData } = $props();
 
 	// --- State ---
+	let currentQuestions = $state<Question[]>([]);
+	let failedQuestions = $state<Question[]>([]);
 	let index = $state(0);
 	let score = $state(0);
 	let selectedAns = $state<string[]>([]);
 	let answerChecked = $state(false);
 
+	// Initialize questions on load
+	$effect(() => {
+		if (currentQuestions.length === 0 && data.questions) {
+			currentQuestions = (data.questions as unknown as Question[]) || [];
+		}
+	});
+
 	// --- Derived state ---
-	// Cleaned up the typing cast here
-	let questions = $derived((data.questions as unknown as Question[]) || []);
-	let question = $derived(questions[index]);
-	let isLast = $derived(index === questions.length - 1);
+	let question = $derived(currentQuestions[index]);
+	let isLast = $derived(index === currentQuestions.length - 1);
 
 	// Ensure we don't show the result screen if there are 0 questions
-	let showResult = $derived(index >= questions.length && questions.length > 0);
+	let showResult = $derived(index >= currentQuestions.length && currentQuestions.length > 0 && failedQuestions.length === 0);
 
 	// --- Functions ---
 	// We now expect the child component to directly pass the string ID of the option
@@ -52,11 +59,29 @@
 			selectedAns.length === correctAns.length &&
 			selectedAns.every((id) => correctAns.includes(id));
 
-		if (isCorrect) score++;
+		if (isCorrect) {
+			score++;
+		} else {
+			// Add to failed questions if not already in there for this round
+			if (!failedQuestions.some((q) => q.id === question.id)) {
+				failedQuestions.push(question);
+			}
+		}
 	}
 
 	function nextQuestion() {
-		index++;
+		if (index < currentQuestions.length - 1) {
+			index++;
+		} else if (failedQuestions.length > 0) {
+			// Start retry round
+			currentQuestions = [...failedQuestions];
+			failedQuestions = [];
+			index = 0;
+		} else {
+			// End of quiz
+			index++;
+		}
+
 		selectedAns = [];
 		answerChecked = false;
 		isCorrect = null;
@@ -64,9 +89,9 @@
 </script>
 
 <div class="font-montserrat max-w-2xl mx-auto p-6">
-	{#if showResult}
-		<QuizResult {score} total={questions.length} />
-	{:else if question}
+	{#if showResult} <!--	"Ist das Quiz schon zu Ende?"   -->
+		<QuizResult {score} total={data.questions.length} />
+	{:else if question} <!-- "Normalfall: Existiert aktuell zumindest eine Frage?: Zeige sie an" -->
 		<QuestionCard
 			{question}
 			selected={selectedAns}
@@ -77,7 +102,7 @@
 			onCheck={checkAnswer}
 			onNext={nextQuestion}
 		/>
-	{:else}
+	{:else}  <!-- Reiner Fallback für 'leere Quizze'. Sollte bei korrekter Datenbank nie angezeigt werden. -->
 		<div class="text-center p-10">
 			<h1 class="text-gray-500 text-xl">Dieses Quiz hat noch keine Fragen.</h1>
 			<p>Vermutlich wurden sie noch nicht eingebettet. Wir bitten noch um etwas Geduld.</p>

@@ -1,5 +1,7 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
+
+	let { data } = $props();
 </script>
 
 <div class="font-montserrat max-w-4xl mx-auto py-10 px-4">
@@ -9,6 +11,10 @@
 	</header>
 
 	<div class="border-2 rounded-xl border-gray-300 overflow-hidden bg-white p-6">
+		<div class="mb-6">
+			<strong>Name:</strong> {data.user?.name || data.user?.username} <br />
+			<strong>Email:</strong> {data.user?.email}
+		</div>
 		<form method="POST" action="?/logout">
 			<button
 				type="submit"
