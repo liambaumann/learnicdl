@@ -1,0 +1,1 @@
+export const AUTH_COOKIE_NAME = 'learnicdl_pb_auth';

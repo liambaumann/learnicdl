@@ -1,8 +1,10 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { ClientResponseError } from 'pocketbase';
+import { AUTH_COOKIE_NAME } from '$lib/auth';
 
+/** @type {import('./$types').Actions} */
 export const actions = {
-	default: async ({ request, locals }) => {
+	default: async ({ request, locals, url, cookies }) => {
 		const data = await request.formData();
 		const email = data.get('email');
 		const password = data.get('password');
@@ -32,7 +34,23 @@ export const actions = {
 			});
 		}
 
-		// If successful, redirect to the home page (where your modules are)
-		throw redirect(303, '/');
+		const record = locals.pb.authStore.record ? JSON.parse(JSON.stringify(locals.pb.authStore.record)) : null;
+		cookies.set(
+			AUTH_COOKIE_NAME,
+			JSON.stringify({
+				token: locals.pb.authStore.token,
+				record
+			}),
+			{
+				path: '/',
+				httpOnly: true,
+				secure: false,
+				sameSite: 'lax'
+			}
+		);
+
+		const redirectTo = url.searchParams.get('redirectTo');
+		const destination = redirectTo?.startsWith('/') ? redirectTo : '/';
+		throw redirect(303, destination);
 	}
 };

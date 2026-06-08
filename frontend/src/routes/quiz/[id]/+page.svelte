@@ -3,6 +3,7 @@
 	import type { Question } from '$lib/types';
 	import QuestionCard from '$lib/components/QuestionCard.svelte';
 	import QuizResult from '$lib/components/QuizResult.svelte';
+	import { onMount } from 'svelte';
 
 	let { data }: { data: PageData } = $props();
 
@@ -14,9 +15,9 @@
 	let selectedAns = $state<string[]>([]);
 	let answerChecked = $state(false);
 
-	// Initialize questions on load
-	$effect(() => {
-		if (currentQuestions.length === 0 && data.questions) {
+	// Initialize questions once on mount to avoid reactive-effect loops
+	onMount(() => {
+		if ((currentQuestions.length === 0 || currentQuestions == null) && data?.questions) {
 			currentQuestions = (data.questions as unknown as Question[]) || [];
 		}
 	});

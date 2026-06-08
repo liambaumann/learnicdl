@@ -39,7 +39,7 @@
 			<img
 				src={question.image}
 				alt="Frage Bild"
-				class="mx-auto rounded-lg mb-6 max-h-64 object-cover"
+				class="w-full rounded-lg mb-6 max-h-96 object-cover"
 			/>
 		{/if}
 

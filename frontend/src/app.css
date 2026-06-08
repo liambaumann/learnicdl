@@ -1,5 +1,5 @@
-@import "tailwindcss";
 @import url(https://fonts.bunny.net/css?family=montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i);
+@import "tailwindcss";
 
 @theme {
     --color-primary: rgb(0, 159, 226);
@@ -20,4 +20,26 @@
     --color-primary-900: color-mix(in srgb, var(--color-primary), black 45%);
     --color-primary-950: color-mix(in srgb, var(--color-primary), black 60%);
     --font-montserrat: 'Montserrat', sans-serif;
+    /* Admin accent color (dark blue) */
+    --color-admin: rgb(12, 50, 100);
+    --color-admin-50: color-mix(in srgb, var(--color-admin), white 95%);
+    --color-admin-100: color-mix(in srgb, var(--color-admin), white 90%);
+    --color-admin-200: color-mix(in srgb, var(--color-admin), white 70%);
+    --color-admin-300: color-mix(in srgb, var(--color-admin), white 50%);
+    --color-admin-400: color-mix(in srgb, var(--color-admin), white 30%);
+    --color-admin-500: color-mix(in srgb, var(--color-admin), white 10%);
+    --color-admin-600: var(--color-admin);
+    --color-admin-700: color-mix(in srgb, var(--color-admin), black 15%);
+    --color-admin-800: color-mix(in srgb, var(--color-admin), black 30%);
+    --color-admin-900: color-mix(in srgb, var(--color-admin), black 45%);
+
+    /* Admin utility classes (simple helpers) */
 }
+
+.bg-admin { background-color: var(--color-admin-600) !important; }
+.bg-admin-50 { background-color: var(--color-admin-50) !important; }
+.text-admin { color: var(--color-admin-600) !important; }
+.border-admin-800 { border-color: var(--color-admin-800) !important; }
+.btn-admin { background-color: var(--color-admin-600); color: white; }
+.btn-admin:hover { background-color: var(--color-admin-700); }
+.admin-banner { background-color: color-mix(in srgb, var(--color-admin-600), white 92%); border-bottom: 4px solid var(--color-admin-800); }

@@ -1,30 +1,30 @@
 import { pb } from '$lib/pb';
-import type { PageLoad } from './$types';
+import type { PageServerLoad } from './$types';
 
 type RawQuestion = {
-	id: string;
-	text: string;
-	type: 'single_choice' | 'multiple_choice';
-	image?: string;
+    id: string;
+    text: string;
+    type: 'single_choice' | 'multiple_choice';
+    image?: string;
 };
 
 type RawQuestionOption = {
-	id: string;
-	question: string;
-	text: string;
-	is_correct: boolean;
+    id: string;
+    question: string;
+    text: string;
+    is_correct: boolean;
 };
 
 function shuffleInPlace<T>(arr: T[]): T[] {
-	for (let i = arr.length - 1; i > 0; i--) {
-		const j = Math.floor(Math.random() * (i + 1));
-		[arr[i], arr[j]] = [arr[j], arr[i]];
-	}
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
 
-	return arr;
+    return arr;
 }
 
-export const load: PageLoad = async ({ params }) => {
+export const load: PageServerLoad = async ({ params }) => {
     const submodule = await pb.collection('submodules').getOne(params.id);
 
     const rawQuestions = (await pb.collection('questions').getFullList({
