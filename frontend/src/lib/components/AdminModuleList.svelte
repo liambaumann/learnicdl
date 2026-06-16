@@ -7,7 +7,6 @@
 
 <div>
     <header class="mb-8 text-left">
-        <div class="text-admin text-3xl md:text-4xl font-extrabold uppercase tracking-widest mb-3">(admin)</div>
         <h1 class="text-2xl md:text-4xl font-bold">Modul- und Quizübersicht</h1>
         <p class="text-gray-500 mt-2">Willkommen zurück, {user?.name}.</p>
 

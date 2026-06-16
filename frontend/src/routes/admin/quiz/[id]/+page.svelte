@@ -8,7 +8,6 @@
 <div class="max-w-4xl mx-auto p-6">
     <div class="flex items-center justify-between mb-6">
         <div>
-            <div class="text-admin text-3xl md:text-4xl font-extrabold uppercase tracking-widest mb-3">(admin)</div>
             <h1 class="text-2xl font-bold">Quiz: {data.submodule.title}</h1>
             <p class="text-sm text-gray-500">{data.submodule.description}</p>
         </div>

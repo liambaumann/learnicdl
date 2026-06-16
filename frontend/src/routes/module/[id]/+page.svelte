@@ -2,48 +2,41 @@
 	import type { PageData } from './$types';
 	import Icon from '@iconify/svelte';
 
-	// Receive the data that +page.ts returned
 	let { data }: { data: PageData } = $props();
 </script>
 
-<div class="font-montserrat max-w-4xl mx-auto py-10 px-4">
-	<div class="flex items-center gap-4 mb-4">
-		<h1 class="text-3xl font-bold">Modul {data.module.title}</h1>
+<div class="font-montserrat max-w-3xl mx-auto py-10 px-4">
+	<div class="flex items-center gap-3 mb-3">
 		<img
 			src="/module_icons/{data.module.icon}.svg"
-			alt="{data.module.name} icon"
-			class="w-12 h-12 md:w-14 md:h-14 mr-3 md:mr-1"
+			alt="{data.module.title} icon"
+			class="w-10 h-10 shrink-0"
 		/>
+		<h1 class="text-3xl font-bold text-slate-900">Modul {data.module.title}</h1>
 	</div>
 
-	<p class="mb-8">{data.module.description}</p>
+	<p class="text-slate-500 leading-relaxed mb-10">{data.module.description}</p>
 
-	<h2 class="text-2xl font-bold mb-4">Verfügbare Quizze</h2>
+	<p class="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-3">
+		Verfügbare Quizze &middot; {data.submodules.length}
+	</p>
 
-	<div
-		class="border-2 rounded-xl border-gray-300 divide-y-2 divide-gray-300 overflow-hidden bg-white"
-	>
+	<div class="border-2 border-b-4 border-gray-300 rounded-xl divide-y-2 divide-gray-200 overflow-hidden bg-white">
 		{#each data.submodules as submodule}
 			<a
 				href="/quiz/{submodule.id}"
-				class="flex items-center p-3 md:p-4 md:gap-4 hover:bg-gray-50 transition-colors"
+				class="flex items-center gap-4 px-5 py-4 hover:bg-slate-50 transition-colors group"
 			>
-				<div class="shrink-0">
-					<Icon
-						icon="tabler:checkbox"
-						class="w-8 h-8 md:w-12 md:h-12 mr-3 md:mr-1 text-primary"
-					/>
-				</div>
-				<div class="flex-1">
-					<h2 class="text-xl font-bold text-slate-800">{submodule.title}</h2>
-					<!--p class="text-slate-600 line-clamp-2 md:line-clamp-3">{submodule.description}</p-->
-
-					<span class="text-xs text-slate-400 font-medium uppercase tracking-wider"> Quiz </span>
-				</div>
-
 				<Icon
-					class="w-6 h-6 text-gray-300 group-hover:text-primary-500 transform transition-none"
+					icon="tabler:square-rounded"
+					class="w-5 h-5 shrink-0 text-slate-300"
+				/>
+				<span class="flex-1 text-base font-semibold text-slate-800">
+					{submodule.title}
+				</span>
+				<Icon
 					icon="tabler:chevron-right"
+					class="w-4 h-4 text-slate-300 group-hover:text-primary transition-colors"
 				/>
 			</a>
 		{/each}

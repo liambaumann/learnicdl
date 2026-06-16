@@ -20,8 +20,8 @@
     --color-primary-900: color-mix(in srgb, var(--color-primary), black 45%);
     --color-primary-950: color-mix(in srgb, var(--color-primary), black 60%);
     --font-montserrat: 'Montserrat', sans-serif;
-    /* Admin accent color (dark blue) */
-    --color-admin: rgb(12, 50, 100);
+    /* Admin accent color (purple) */
+    --color-admin: #454545;
     --color-admin-50: color-mix(in srgb, var(--color-admin), white 95%);
     --color-admin-100: color-mix(in srgb, var(--color-admin), white 90%);
     --color-admin-200: color-mix(in srgb, var(--color-admin), white 70%);
@@ -34,6 +34,10 @@
     --color-admin-900: color-mix(in srgb, var(--color-admin), black 45%);
 
     /* Admin utility classes (simple helpers) */
+}
+
+html.admin-theme {
+    --color-primary: #454545;
 }
 
 .bg-admin { background-color: var(--color-admin-600) !important; }

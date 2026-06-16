@@ -24,7 +24,6 @@
 
 	// --- Derived state ---
 	let question = $derived(currentQuestions[index]);
-	let isLast = $derived(index === currentQuestions.length - 1);
 
 	// Ensure we don't show the result screen if there are 0 questions
 	let showResult = $derived(index >= currentQuestions.length && currentQuestions.length > 0 && failedQuestions.length === 0);
@@ -89,21 +88,24 @@
 	}
 </script>
 
-<div class="font-montserrat max-w-2xl mx-auto p-6">
-	{#if showResult} <!--	"Ist das Quiz schon zu Ende?"   -->
+<div class="font-montserrat max-w-4xl mx-auto h-full">
+	{#if showResult}
 		<QuizResult {score} total={data.questions.length} />
-	{:else if question} <!-- "Normalfall: Existiert aktuell zumindest eine Frage?: Zeige sie an" -->
+	{:else if question}
 		<QuestionCard
 			{question}
 			selected={selectedAns}
 			{answerChecked}
-			{isLast}
 			{isCorrect}
+			{score}
+			totalQuestions={data.questions.length}
+			quizTitle={data.submodule.title}
+			exitHref="/module/{data.submodule.module}"
 			onToggle={toggleOption}
 			onCheck={checkAnswer}
 			onNext={nextQuestion}
 		/>
-	{:else}  <!-- Reiner Fallback für 'leere Quizze'. Sollte bei korrekter Datenbank nie angezeigt werden. -->
+	{:else}
 		<div class="text-center p-10">
 			<h1 class="text-gray-500 text-xl">Dieses Quiz hat noch keine Fragen.</h1>
 			<p>Vermutlich wurden sie noch nicht eingebettet. Wir bitten noch um etwas Geduld.</p>
