@@ -26,6 +26,7 @@ function shuffleInPlace<T>(arr: T[]): T[] {
 
 export const load: PageServerLoad = async ({ params }) => {
     const submodule = await pb.collection('submodules').getOne(params.id);
+    const module = await pb.collection('modules').getOne(submodule.module);
 
     const rawQuestions = (await pb.collection('questions').getFullList({
         filter: `submodule = "${params.id}"`,
@@ -66,5 +67,5 @@ export const load: PageServerLoad = async ({ params }) => {
         };
     });
 
-    return { submodule, questions };
+    return { submodule, module, questions };
 };

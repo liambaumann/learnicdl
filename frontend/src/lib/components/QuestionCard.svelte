@@ -51,7 +51,7 @@
 				<Icon icon="tabler:x" class="w-5 h-5" />
 			</a>
 			<span class="flex-1 text-lg font-bold text-gray-800 truncate">{quizTitle}</span>
-			<span class="shrink-0 text-sm text-gray-400 tabular-nums">{score}/{totalQuestions}</span>
+			<span class="shrink-0 text-sm text-gray-400 tabular-nums">{Math.round(score / totalQuestions * 100)}%</span>
 		</div>
 		<div class="h-1.5 bg-gray-200 rounded-full overflow-hidden">
 			<div
@@ -138,14 +138,14 @@
 	<div class="shrink-0 border-t-2 border-gray-200 bg-white py-4 px-5 sm:py-5 sm:px-8">
 		{#if answerChecked}
 			<div
-				class="flex items-center gap-2 mb-3 px-3 py-2.5 rounded-lg
-				{isCorrect ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}"
+				class="flex items-center gap-3 mb-3 px-4 py-4 rounded-lg border-2 border-b-4
+				{isCorrect ? 'bg-green-100 border-green-400 text-green-900' : 'bg-red-100 border-red-400 text-red-900'}"
 			>
 				<Icon
 					icon={isCorrect ? 'tabler:circle-check' : 'tabler:circle-x'}
-					class="w-5 h-5 shrink-0"
+					class="w-6 h-6 shrink-0"
 				/>
-				<span class="text-sm font-medium">
+				<span class="text-sm font-semibold">
 					{isCorrect ? 'Richtig! Gut gemacht.' : 'Nicht ganz richtig.'}
 				</span>
 			</div>

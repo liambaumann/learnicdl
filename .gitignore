@@ -1,4 +1,12 @@
 # PocketBase
-/pocketbase/pb_data/
-/pocketbase/pocketbase
-/pocketbase/pocketbase.exe
+/backend/pb_data/
+/backend/pocketbase
+/backend/pocketbase.exe
+
+# npm
+pnpm-lock.yaml
+
+#other
+tools/
+node_modules/
+.DS_Store

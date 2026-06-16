@@ -11,7 +11,8 @@
 	let currentQuestions = $state<Question[]>([]);
 	let failedQuestions = $state<Question[]>([]);
 	let index = $state(0);
-	let score = $state(0);
+	let firstAttemptCorrect = $state(0);
+	let isRetryRound = $state(false);
 	let selectedAns = $state<string[]>([]);
 	let answerChecked = $state(false);
 
@@ -60,7 +61,7 @@
 			selectedAns.every((id) => correctAns.includes(id));
 
 		if (isCorrect) {
-			score++;
+			if (!isRetryRound) firstAttemptCorrect++;
 		} else {
 			// Add to failed questions if not already in there for this round
 			if (!failedQuestions.some((q) => q.id === question.id)) {
@@ -77,6 +78,7 @@
 			currentQuestions = [...failedQuestions];
 			failedQuestions = [];
 			index = 0;
+			isRetryRound = true;
 		} else {
 			// End of quiz
 			index++;
@@ -90,14 +92,14 @@
 
 <div class="font-montserrat max-w-4xl mx-auto h-full">
 	{#if showResult}
-		<QuizResult {score} total={data.questions.length} />
+		<QuizResult score={firstAttemptCorrect} total={data.questions.length} moduleHref="/module/{data.submodule.module}" moduleTitle={data.module.title} />
 	{:else if question}
 		<QuestionCard
 			{question}
 			selected={selectedAns}
 			{answerChecked}
 			{isCorrect}
-			{score}
+			score={firstAttemptCorrect}
 			totalQuestions={data.questions.length}
 			quizTitle={data.submodule.title}
 			exitHref="/module/{data.submodule.module}"
