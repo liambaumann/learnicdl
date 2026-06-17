@@ -6,12 +6,12 @@
 
 <div class="font-montserrat max-w-4xl mx-auto py-10 px-4">
 	<header class="mb-8">
-		<h1 class="text-2xl md:text-3xl font-bold">Benutzerverwaltung</h1>
-		<p class="text-gray-500">Hier können Sie Ihre persönlichen Einstellungen verwalten.</p>
+		<h1 class="text-2xl md:text-3xl font-bold dm-text">Benutzerverwaltung</h1>
+		<p class="text-gray-500 dm-text2">Hier können Sie Ihre persönlichen Einstellungen verwalten.</p>
 	</header>
 
-	<div class="border-2 rounded-xl border-gray-300 overflow-hidden bg-white p-6">
-		<div class="mb-6">
+	<div class="border-2 rounded-xl border-gray-300 overflow-hidden bg-white dm-card p-6">
+		<div class="mb-6 dm-text">
 			<strong>Name:</strong> {data.user?.name || data.user?.username} <br />
 			<strong>Email:</strong> {data.user?.email}
 		</div>

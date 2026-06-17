@@ -9,15 +9,19 @@
 	} = $props();
 </script>
 
-<div class="fixed inset-0 flex items-center justify-center">
+<div class="fixed inset-0 flex items-center justify-center bg-white dm-result-bg">
 	<div class="text-center p-10">
-		<h2 class="text-3xl font-bold text-gray-800 mb-2">Quiz abgeschlossen!</h2>
-		<p class="text-gray-600 mb-6">Dein Ergebnis</p>
+		<h2 class="text-3xl font-bold text-gray-800 dm-text mb-8">Quiz abgeschlossen!</h2>
 
-		<div class="inline-block bg-primary-50 border-2 border-b-4 border-primary rounded-xl px-8 py-4 mb-8">
-			<span class="text-4xl font-black text-primary-600">{score}</span>
-			<span class="text-xl text-primary-400">/ {total}</span>
+		<p class="text-xs font-semibold uppercase tracking-widest text-slate-400 dm-text3 mb-2">Dein Ergebnis</p>
+		<div class="mb-2">
+			<span class="text-5xl font-black text-primary-600">{score}</span>
+			<span class="text-2xl text-primary-300 font-bold">/{total}</span>
 		</div>
+		<p class="text-sm text-slate-500 dm-text2 mb-10">
+			Antworten waren beim ersten Versuch korrekt.<br />
+			Das entspricht <span class="font-semibold text-slate-700 dm-text">{Math.floor(score / total * 100)}%</span>.
+		</p>
 
 		<div class="flex flex-col sm:flex-row items-center justify-center gap-3">
 			<a
@@ -28,7 +32,7 @@
 			</a>
 			<a
 				href="/"
-				class="inline-flex items-center justify-center gap-2 px-6 py-3 text-base font-semibold rounded-lg text-gray-700 bg-white border-2 border-b-4 border-gray-300 hover:bg-gray-50 transition-colors"
+				class="inline-flex items-center justify-center gap-2 px-6 py-3 text-base font-semibold rounded-lg text-gray-700 bg-white border-2 border-b-4 border-gray-300 hover:bg-gray-50 transition-colors dm-result-btn"
 			>
 				<Icon icon="tabler:home" class="w-5 h-5" />
 				Modulübersicht

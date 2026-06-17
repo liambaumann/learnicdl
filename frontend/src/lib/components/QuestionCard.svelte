@@ -45,15 +45,15 @@
 		<div class="flex items-center gap-2 mb-2.5">
 			<a
 				href={exitHref}
-				class="shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
+				class="shrink-0 text-gray-400 hover:text-gray-600 transition-colors dm-icon-close"
 				aria-label="Quiz verlassen"
 			>
 				<Icon icon="tabler:x" class="w-5 h-5" />
 			</a>
-			<span class="flex-1 text-lg font-bold text-gray-800 truncate">{quizTitle}</span>
-			<span class="shrink-0 text-sm text-gray-400 tabular-nums">{Math.round(score / totalQuestions * 100)}%</span>
+			<span class="flex-1 text-lg font-bold text-gray-800 truncate dm-text">{quizTitle}</span>
+			<span class="shrink-0 text-sm text-gray-400 tabular-nums dm-text2">{Math.round(score / totalQuestions * 100)}%</span>
 		</div>
-		<div class="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+		<div class="h-1.5 bg-gray-200 rounded-full overflow-hidden dm-progress">
 			<div
 				class="h-full bg-primary rounded-full transition-all duration-500 ease-out"
 				style="width: {(score / totalQuestions) * 100}%"
@@ -69,13 +69,13 @@
 			</span>
 
 			<div class="flex justify-between items-start mb-5">
-				<h3 class="text-base sm:text-lg font-medium text-gray-900 flex-1 mr-3">
+				<h3 class="text-base sm:text-lg font-medium text-gray-900 flex-1 mr-3 dm-text">
 					{question.text}
 				</h3>
 				<button
 					type="button"
 					onclick={onReport}
-					class="text-gray-300 hover:text-gray-400 flex-shrink-0 mt-0.5"
+					class="text-gray-300 hover:text-gray-400 flex-shrink-0 mt-0.5 dm-icon-report"
 					aria-label="Frage melden"
 				>
 					<Icon icon="tabler:flag-3" class="w-5 h-5" />
@@ -135,18 +135,15 @@
 	</div>
 
 	<!-- Zone 3: Fixed action bar -->
-	<div class="shrink-0 border-t-2 border-gray-200 bg-white py-4 px-5 sm:py-5 sm:px-8">
+	<div class="shrink-0 border-t-2 border-gray-200 bg-white py-4 px-5 sm:py-5 sm:px-8 dm-action-bar">
 		{#if answerChecked}
-			<div
-				class="flex items-center gap-3 mb-3 px-4 py-4 rounded-lg border-2 border-b-4
-				{isCorrect ? 'bg-green-100 border-green-400 text-green-900' : 'bg-red-100 border-red-400 text-red-900'}"
-			>
+			<div class="flex items-center gap-3 mb-4">
 				<Icon
-					icon={isCorrect ? 'tabler:circle-check' : 'tabler:circle-x'}
-					class="w-6 h-6 shrink-0"
+					icon={isCorrect ? 'tabler:check' : 'tabler:x'}
+					class="w-10 h-10 shrink-0 {isCorrect ? 'text-green-500' : 'text-red-400'}"
 				/>
-				<span class="text-sm font-semibold">
-					{isCorrect ? 'Richtig! Gut gemacht.' : 'Nicht ganz richtig.'}
+				<span class="text-base font-semibold {isCorrect ? 'text-green-800 dm-feedback-ok' : 'text-red-700 dm-feedback-err'}">
+					{isCorrect ? 'Richtig!' : 'Nicht ganz.'}
 				</span>
 			</div>
 		{/if}
@@ -155,7 +152,7 @@
 			<button
 				type="button"
 				onclick={answerChecked ? onExplain : onHint}
-				class="h-10 sm:h-11 px-4 flex items-center gap-2 rounded-lg border-2 border-b-4 border-gray-300 bg-white text-primary hover:bg-gray-50 font-medium text-sm transition-all shrink-0"
+				class="h-10 sm:h-11 px-4 flex items-center gap-2 rounded-lg border-2 border-b-4 border-gray-300 bg-white text-primary hover:bg-gray-50 font-medium text-sm transition-all shrink-0 dm-hint-btn"
 			>
 				<Icon
 					icon={answerChecked ? 'tabler:book-2' : 'tabler:bulb'}

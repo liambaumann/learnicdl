@@ -32,8 +32,6 @@
     --color-admin-700: color-mix(in srgb, var(--color-admin), black 15%);
     --color-admin-800: color-mix(in srgb, var(--color-admin), black 30%);
     --color-admin-900: color-mix(in srgb, var(--color-admin), black 45%);
-
-    /* Admin utility classes (simple helpers) */
 }
 
 html.admin-theme {
@@ -47,3 +45,172 @@ html.admin-theme {
 .btn-admin { background-color: var(--color-admin-600); color: white; }
 .btn-admin:hover { background-color: var(--color-admin-700); }
 .admin-banner { background-color: color-mix(in srgb, var(--color-admin-600), white 92%); border-bottom: 4px solid var(--color-admin-800); }
+
+/* ── Dark Mode ─────────────────────────────────────────────────────────────
+   Uses html.dark class toggled by ThemeToggle — avoids Tailwind's built-in
+   dark: media-query variant so manual light/dark/system selection works
+   even when the OS is set to dark.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Desaturate primary blue in user (non-admin) dark mode */
+html.dark:not(.admin-theme) {
+    --color-primary: #1e6fb0;
+}
+
+/* Page background */
+html.dark .dm-bg {
+    background-color: #0f1419 !important;
+    color: rgba(255, 255, 255, 0.87);
+}
+
+/* Cards / panels */
+html.dark .dm-card {
+    background-color: #161d27 !important;
+    border-color: #334155 !important;
+}
+html.dark .dm-card-elev {
+    background-color: #1a2332 !important;
+    border-color: #334155 !important;
+}
+
+/* Dividers */
+html.dark .dm-divide > :not([hidden]) ~ :not([hidden]) {
+    border-color: #334155 !important;
+}
+html.dark .dm-border {
+    border-color: #334155 !important;
+}
+
+/* Row / list hover */
+html.dark .dm-hover:hover {
+    background-color: #1e2a3a !important;
+}
+
+/* Text levels */
+html.dark .dm-text  { color: rgba(255, 255, 255, 0.87); }
+html.dark .dm-text2 { color: #94a3b8; }
+html.dark .dm-text3 { color: #94a3b8; }
+
+/* Decorative icons */
+html.dark .dm-icon        { color: #475569 !important; }
+html.dark .dm-icon-close  { color: #64748b; }
+html.dark .dm-icon-close:hover { color: #94a3b8; }
+html.dark .dm-icon-report { color: #475569; }
+html.dark .dm-icon-report:hover { color: #64748b; }
+
+/* ── Navigation ────────────────────────────────────────────────────────── */
+
+/* Admin dark nav: switch to light gray */
+html.dark.admin-theme .dm-nav {
+    background-color: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+}
+html.dark.admin-theme .dm-nav-text { color: #374151 !important; }
+html.dark.admin-theme .dm-nav-btn {
+    background-color: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+    color: #6b7280 !important;
+}
+html.dark.admin-theme .dm-nav-btn:hover {
+    background-color: #e2e8f0 !important;
+    color: #111827 !important;
+}
+
+/* Theme toggle button */
+html.dark.admin-theme .dm-toggle {
+    border-color: #94a3b8 !important;
+}
+html.dark.admin-theme .dm-toggle-btn {
+    color: #6b7280 !important;
+}
+html.dark.admin-theme .dm-toggle-btn:hover {
+    background-color: #e2e8f0 !important;
+    color: #111827 !important;
+}
+
+/* ── Quiz ──────────────────────────────────────────────────────────────── */
+
+html.dark .dm-progress { background-color: #334155; }
+
+html.dark .dm-action-bar {
+    background-color: #161d27 !important;
+    border-color: #334155 !important;
+}
+
+html.dark .dm-hint-btn {
+    background-color: #1a2332 !important;
+    border-color: #334155 !important;
+    color: #7db3d8 !important;
+}
+html.dark .dm-hint-btn:hover { background-color: #263548 !important; }
+
+html.dark .dm-feedback-ok   { color: #86efac; }
+html.dark .dm-feedback-err  { color: #fca5a5; }
+
+/* ── Quiz Result ───────────────────────────────────────────────────────── */
+
+html.dark .dm-result-bg { background-color: #0f1419 !important; }
+html.dark .dm-result-btn {
+    background-color: #1a2332 !important;
+    border-color: #334155 !important;
+    color: rgba(255, 255, 255, 0.87) !important;
+}
+html.dark .dm-result-btn:hover { background-color: #263548 !important; }
+
+/* ── Answer Options ────────────────────────────────────────────────────── */
+
+html.dark .dm-opt {
+    border-color: #334155 !important;
+    color: rgba(255, 255, 255, 0.87);
+}
+html.dark .dm-opt:not(:disabled):hover {
+    border-color: #1e6fb0 !important;
+    background-color: rgba(30, 111, 176, 0.08) !important;
+}
+html.dark .dm-opt.opt-sel {
+    border-color: #3b82f6 !important;
+    background-color: rgba(30, 111, 176, 0.18) !important;
+    color: #93c5fd !important;
+}
+html.dark .dm-opt.opt-cor {
+    border-color: #22c55e !important;
+    background-color: rgba(34, 197, 94, 0.12) !important;
+    color: #86efac !important;
+}
+html.dark .dm-opt.opt-wrg {
+    border-color: #ef4444 !important;
+    background-color: rgba(239, 68, 68, 0.12) !important;
+    color: #fca5a5 !important;
+}
+html.dark .dm-opt.opt-neu {
+    border-color: #334155 !important;
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Option checkbox inner indicator */
+html.dark .dm-check {
+    background-color: #1a2332 !important;
+    border-color: #4b5563 !important;
+}
+html.dark .opt-sel .dm-check {
+    background-color: #3b82f6 !important;
+    border-color: #3b82f6 !important;
+}
+/* correct/wrong checkbox backgrounds stay green-500/red-500 — readable on dark too */
+
+/* ── Login / Forms ─────────────────────────────────────────────────────── */
+
+html.dark .dm-input {
+    background-color: #1a2332 !important;
+    border-color: #334155 !important;
+    color: rgba(255, 255, 255, 0.87) !important;
+}
+html.dark .dm-input::placeholder { color: #64748b !important; }
+html.dark .dm-error {
+    color: #fca5a5 !important;
+    background-color: rgba(239, 68, 68, 0.12) !important;
+}
+
+/* ── Admin ─────────────────────────────────────────────────────────────── */
+
+html.dark .dm-admin-icon-bg { background-color: #1a2332 !important; }
