@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 284 284" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill:#009fe0;fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(0.24,0,0,0.24,-340.08,-340.08)">
+        <g id="Artboard1" transform="matrix(1.01995,0,0,1.162502,-2077.026641,1091.822184)">
+            <rect x="3426" y="280" width="1158" height="1016" style="fill:none;"/>
+            <g transform="matrix(0.98044,0,0,0.860213,4004.990672,787.991816)">
+                <g transform="matrix(1,0,0,1,-590.541667,-590.541667)">
+                    <g id="Layer_1" transform="matrix(4.166667,0,0,4.166667,0,0)">
+                        <path d="M169.69,42.52L70.48,42.52L70.48,240.94L212.21,240.94L212.21,85L169.69,42.52ZM198,226.77L84.65,226.77L84.65,56.69L169.65,56.69L169.65,85L198,85L198,226.77Z" style="fill-rule:nonzero;"/>
+                        <rect x="98.83" y="70.87" width="56.69" height="14.17"/>
+                        <rect x="98.83" y="99.22" width="85.04" height="14.17"/>
+                        <rect x="98.83" y="127.57" width="85.04" height="14.17"/>
+                        <rect x="98.83" y="155.91" width="85.04" height="14.17"/>
+                        <rect x="98.83" y="184.26" width="85.04" height="14.17"/>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

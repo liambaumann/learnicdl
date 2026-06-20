@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import Icon from '@iconify/svelte';
+	import { dark } from '$lib/theme';
 
 	let { data }: { data: PageData } = $props();
 </script>
@@ -17,7 +18,7 @@
 				class="flex items-center gap-4 px-5 py-4 hover:bg-slate-50 transition-colors group dm-hover"
 			>
 				<img
-					src="/module_icons/{module.icon}.svg"
+					src="/module_icons/{$dark ? 'dark' : 'cyan'}/{module.icon}.svg"
 					alt="{module.title} icon"
 					class="w-10 h-10 shrink-0"
 				/>

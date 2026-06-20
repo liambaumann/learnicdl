@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import Icon from '@iconify/svelte';
+	import { dark } from '$lib/theme';
 
 	let { data }: { data: PageData } = $props();
 </script>
@@ -8,7 +9,7 @@
 <div class="font-montserrat max-w-3xl mx-auto py-10 px-4">
 	<div class="flex items-center gap-3 mb-3">
 		<img
-			src="/module_icons/{data.module.icon}.svg"
+			src="/module_icons/{$dark ? 'dark' : 'cyan'}/{data.module.icon}.svg"
 			alt="{data.module.title} icon"
 			class="w-10 h-10 shrink-0"
 		/>

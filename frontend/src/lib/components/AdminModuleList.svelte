@@ -1,5 +1,6 @@
 <script lang="ts">
     import Icon from '@iconify/svelte';
+    import { dark } from '$lib/theme';
     export let modules: any[] = [];
     export let submodulesByModule: Record<string, any[]> = {};
     export let user: any;
@@ -29,7 +30,7 @@
                     <div class="flex items-center gap-4">
                         <div class="shrink-0 rounded-xl bg-admin-50 p-3 dm-admin-icon-bg">
                             {#if module.icon}
-                                <img src="/module_icons/{module.icon}.svg" alt="{module.title} icon" class="h-12 w-12" />
+                                <img src="/module_icons/{$dark ? 'dark' : 'cyan'}/{module.icon}.svg" alt="{module.title} icon" class="h-12 w-12" />
                             {:else}
                                 <Icon icon="tabler:stack-2" class="h-12 w-12 text-admin" />
                             {/if}
