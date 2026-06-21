@@ -214,3 +214,7 @@ html.dark .dm-error {
 /* ── Admin ─────────────────────────────────────────────────────────────── */
 
 html.dark .dm-admin-icon-bg { background-color: #1a2332 !important; }
+
+/* ── Module icon circle ─────────────────────────────────────────────────── */
+
+html.dark .dm-icon-circle { background-color: rgba(30, 111, 176, 0.15) !important; }

@@ -17,11 +17,13 @@
 				href="/module/{module.id}"
 				class="flex items-center gap-4 px-5 py-4 hover:bg-slate-50 transition-colors group dm-hover"
 			>
-				<img
-					src="/module_icons/{$dark ? 'dark' : 'cyan'}/{module.icon}.svg"
-					alt="{module.title} icon"
-					class="w-10 h-10 shrink-0"
-				/>
+				<div class="w-14 h-14 rounded-full bg-primary-100 flex items-center justify-center shrink-0 dm-icon-circle">
+					<img
+						src="/module_icons/{$dark ? 'dark' : 'cyan'}/{module.icon}.svg"
+						alt="{module.title} icon"
+						class="w-10 h-10"
+					/>
+				</div>
 				<span class="flex-1 text-base font-semibold text-slate-800 dm-text">{module.title}</span>
 				<Icon
 					class="w-4 h-4 text-slate-300 group-hover:text-primary transition-colors dm-icon"

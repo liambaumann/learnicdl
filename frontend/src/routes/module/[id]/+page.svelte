@@ -8,11 +8,13 @@
 
 <div class="font-montserrat max-w-3xl mx-auto py-10 px-4">
 	<div class="flex items-center gap-3 mb-3">
-		<img
-			src="/module_icons/{$dark ? 'dark' : 'cyan'}/{data.module.icon}.svg"
-			alt="{data.module.title} icon"
-			class="w-10 h-10 shrink-0"
-		/>
+		<div class="w-14 h-14 rounded-full bg-primary-100 flex items-center justify-center shrink-0 dm-icon-circle">
+			<img
+				src="/module_icons/{$dark ? 'dark' : 'cyan'}/{data.module.icon}.svg"
+				alt="{data.module.title} icon"
+				class="w-10 h-10"
+			/>
+		</div>
 		<h1 class="text-3xl font-bold text-slate-900 dm-text">Modul {data.module.title}</h1>
 	</div>
 
