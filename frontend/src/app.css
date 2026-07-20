@@ -74,7 +74,7 @@ html.dark .dm-card-elev {
 }
 
 /* Dividers */
-html.dark .dm-divide > :not([hidden]) ~ :not([hidden]) {
+html.dark .dm-divide > :not(:last-child) {
     border-color: #334155 !important;
 }
 html.dark .dm-border {

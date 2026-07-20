@@ -19,8 +19,7 @@
 			<span class="text-2xl text-primary-300 font-bold">/{total}</span>
 		</div>
 		<p class="text-sm text-slate-500 dm-text2 mb-10">
-			Antworten waren beim ersten Versuch korrekt.<br />
-			Das entspricht <span class="font-semibold text-slate-700 dm-text">{Math.floor(score / total * 100)}%</span>.
+			Du hast <span class="font-semibold text-slate-700 dm-text">{Math.floor(score / total * 100)}%</span> der Fragen beim ersten Versuch korrekt beantwortet.
 		</p>
 
 		<div class="flex flex-col sm:flex-row items-center justify-center gap-3">
