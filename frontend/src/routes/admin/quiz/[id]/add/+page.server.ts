@@ -1,5 +1,5 @@
 import { pb } from '$lib/pb';
-import { redirect, fail } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
 
 export const actions: Actions = {

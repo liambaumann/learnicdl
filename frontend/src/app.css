@@ -44,7 +44,6 @@ html.admin-theme {
 .border-admin-800 { border-color: var(--color-admin-800) !important; }
 .btn-admin { background-color: var(--color-admin-600); color: white; }
 .btn-admin:hover { background-color: var(--color-admin-700); }
-.admin-banner { background-color: color-mix(in srgb, var(--color-admin-600), white 92%); border-bottom: 4px solid var(--color-admin-800); }
 
 /* ── Dark Mode ─────────────────────────────────────────────────────────────
    Uses html.dark class toggled by ThemeToggle — avoids Tailwind's built-in
