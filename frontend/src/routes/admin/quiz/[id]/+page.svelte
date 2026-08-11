@@ -20,14 +20,14 @@
                 <div class="flex items-center justify-between px-4 py-3 hover:bg-gray-50 border-b border-gray-200 last:border-b-0 dm-hover dm-border">
                     <a href="/admin/question/{q.id}" class="flex items-center gap-3">
                         <div class="w-8 h-8 rounded bg-gray-100 flex items-center justify-center dm-admin-icon-bg">
-                            {#if q.image}
+                            {#if q.question_image}
                                 <Icon icon="tabler:image" class="w-4 h-4 text-gray-500 dm-text2" />
                             {:else}
                                 <Icon icon="tabler:file-text" class="w-4 h-4 text-gray-500 dm-text2" />
                             {/if}
                         </div>
                         <div>
-                            <div class="font-medium dm-text">{q.text}</div>
+                            <div class="font-medium dm-text">{q.question}</div>
                             <div class="text-xs text-gray-400 dm-text3">{q.type}</div>
                         </div>
                     </a>

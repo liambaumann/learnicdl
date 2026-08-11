@@ -49,7 +49,7 @@
 
 <input type="file" {name} accept="image/*" class="hidden" bind:this={fileInput} onchange={onFileChange} />
 {#if removed}
-    <input type="hidden" name="remove_image" value="1" />
+    <input type="hidden" name="remove_{name}" value="1" />
 {/if}
 
 {#if previewUrl}

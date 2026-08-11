@@ -31,7 +31,8 @@
 
 
 <div class="max-w-4xl mx-auto p-6">
-    <h1 class="text-2xl font-bold mb-4">Edit Question</h1>
+    <h1 class="text-2xl font-bold mb-1">Edit Question</h1>
+    <p class="text-xs text-gray-400 mb-4">* required field</p>
 
     <form method="POST" enctype="multipart/form-data" use:enhance={submitHandler} class="space-y-4">
         {#if form?.error}
@@ -39,8 +40,8 @@
         {/if}
 
         <div>
-            <label class="block text-sm font-medium">Question Text</label>
-            <input name="text" value={question.text} required oninput={markDirty} class="w-full border border-gray-200 rounded px-3 py-2 shadow-sm" />
+            <label class="block text-sm font-medium">Question Text *</label>
+            <input name="text" value={question.question} required oninput={markDirty} class="w-full border border-gray-200 rounded px-3 py-2 shadow-sm" />
         </div>
 
         <div>
@@ -53,11 +54,31 @@
 
         <div>
             <p class="block text-sm font-medium mb-1">Image</p>
-            <ImageUploadField existingUrl={data.imageUrl} onchange={markDirty} />
+            <ImageUploadField name="question_image" existingUrl={data.imageUrl} onchange={markDirty} />
+        </div>
+
+        <div>
+            <label class="block text-sm font-medium">Hint</label>
+            <textarea name="hint" oninput={markDirty} rows="2" class="w-full border border-gray-200 rounded px-3 py-2 shadow-sm">{question.hint}</textarea>
+        </div>
+
+        <div>
+            <p class="block text-sm font-medium mb-1">Hint Image</p>
+            <ImageUploadField name="hint_image" existingUrl={data.hintImageUrl} onchange={markDirty} />
+        </div>
+
+        <div>
+            <label class="block text-sm font-medium">Explanation</label>
+            <textarea name="explanation" oninput={markDirty} rows="2" class="w-full border border-gray-200 rounded px-3 py-2 shadow-sm">{question.explanation}</textarea>
+        </div>
+
+        <div>
+            <p class="block text-sm font-medium mb-1">Explanation Image</p>
+            <ImageUploadField name="explanation_image" existingUrl={data.explanationImageUrl} onchange={markDirty} />
         </div>
 
         <fieldset class="mt-2">
-            <legend class="font-medium mb-2">Answer Options</legend>
+            <legend class="font-medium mb-2">Answer Options *</legend>
             {#each options as opt, i}
                 <input type="hidden" name="option_id_{i}" value={opt.id} />
                 <div class="flex items-center gap-3 mb-2">

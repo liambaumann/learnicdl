@@ -11,4 +11,6 @@ export interface Question {
 	options: Option[];
 	answers: string[];
 	image?: string;
+	hint?: string;
+	hintImage?: string;
 }

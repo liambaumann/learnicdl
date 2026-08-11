@@ -16,11 +16,14 @@ export const load: PageServerLoad = async ({ params, locals }) => {
         sort: 'created'
     });
 
-    const imageUrl = question.image
-        ? `${pbClient.baseUrl}/api/files/${question.collectionId}/${question.id}/${question.image}`
-        : '';
+    const fileUrl = (filename: string) =>
+        filename ? `/api/files/${question.collectionId}/${question.id}/${filename}` : '';
 
-    return { question, options, imageUrl };
+    const imageUrl = fileUrl(question.question_image);
+    const hintImageUrl = fileUrl(question.hint_image);
+    const explanationImageUrl = fileUrl(question.explanation_image);
+
+    return { question, options, imageUrl, hintImageUrl, explanationImageUrl };
 };
 
 export const actions: Actions = {
@@ -34,6 +37,8 @@ export const actions: Actions = {
         const data = await request.formData();
         const text = String(data.get('text') || '').trim();
         const type = String(data.get('type') || 'single_choice');
+        const hint = String(data.get('hint') || '').trim();
+        const explanation = String(data.get('explanation') || '').trim();
 
         // option IDs are passed as hidden inputs so we don't need an extra DB read
         const optionIds: string[] = [];
@@ -68,16 +73,23 @@ export const actions: Actions = {
             return fail(400, { error: true, message: 'At least one option must be marked correct.' });
         }
 
-        const imageFile = data.get('image');
-        const removeImage = data.get('remove_image') === '1';
-        const newImage = imageFile instanceof File && imageFile.size > 0 ? imageFile : null;
+        const fileUpdate = (fieldName: string) => {
+            const file = data.get(fieldName);
+            const remove = data.get(`remove_${fieldName}`) === '1';
+            const newFile = file instanceof File && file.size > 0 ? file : null;
+            return newFile ? { [fieldName]: newFile } : remove ? { [fieldName]: null } : {};
+        };
 
         try {
             await pbClient.collection('questions').update(params.id, {
-                text,
+                question: text,
                 type,
+                hint,
+                explanation,
                 answers: correctIds,
-                ...(newImage ? { image: newImage } : removeImage ? { image: null } : {})
+                ...fileUpdate('question_image'),
+                ...fileUpdate('hint_image'),
+                ...fileUpdate('explanation_image')
             });
 
             for (let i = 0; i < optionIds.length; i++) {

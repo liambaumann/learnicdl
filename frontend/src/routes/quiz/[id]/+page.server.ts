@@ -1,11 +1,12 @@
-import { pb } from '$lib/pb';
 import type { PageServerLoad } from './$types';
 
 type RawQuestion = {
     id: string;
-    text: string;
+    question: string;
     type: 'single_choice' | 'multiple_choice';
-    image?: string;
+    question_image?: string;
+    hint?: string;
+    hint_image?: string;
 };
 
 type RawQuestionOption = {
@@ -24,11 +25,11 @@ function shuffleInPlace<T>(arr: T[]): T[] {
     return arr;
 }
 
-export const load: PageServerLoad = async ({ params }) => {
-    const submodule = await pb.collection('submodules').getOne(params.id);
-    const module = await pb.collection('modules').getOne(submodule.module);
+export const load: PageServerLoad = async ({ params, locals }) => {
+    const submodule = await locals.pb.collection('submodules').getOne(params.id);
+    const module = await locals.pb.collection('modules').getOne(submodule.module);
 
-    const rawQuestions = (await pb.collection('questions').getFullList({
+    const rawQuestions = (await locals.pb.collection('questions').getFullList({
         filter: `submodule = "${params.id}"`,
         sort: 'created'
     })) as RawQuestion[];
@@ -38,7 +39,7 @@ export const load: PageServerLoad = async ({ params }) => {
     }
 
     const optionFilter = rawQuestions.map((question) => `question = "${question.id}"`).join(' || ');
-    const rawOptions = (await pb.collection('question_options').getFullList({
+    const rawOptions = (await locals.pb.collection('question_options').getFullList({
         filter: optionFilter
     })) as RawQuestionOption[];
 
@@ -50,20 +51,22 @@ export const load: PageServerLoad = async ({ params }) => {
         optionsByQuestion.set(option.question, list);
     }
 
-    const questions = rawQuestions.map((question) => {
-        const options = shuffleInPlace([...(optionsByQuestion.get(question.id) ?? [])]);
+    const questions = rawQuestions.map((q) => {
+        const options = shuffleInPlace([...(optionsByQuestion.get(q.id) ?? [])]);
         const answers = options.filter((option) => option.is_correct).map((option) => option.id);
 
         return {
-            id: question.id,
-            text: question.text,
-            type: question.type,
+            id: q.id,
+            text: q.question,
+            type: q.type,
             options: options.map((option) => ({
                 id: option.id,
                 text: option.text
             })),
             answers,
-            ...(question.image && { image: `${pb.baseUrl}/api/files/pbc_4009210445/${question.id}/${question.image}` })
+            ...(q.question_image && { image: `/api/files/pbc_4009210445/${q.id}/${q.question_image}` }),
+            ...(q.hint && { hint: q.hint }),
+            ...(q.hint_image && { hintImage: `/api/files/pbc_4009210445/${q.id}/${q.hint_image}` })
         };
     });
 

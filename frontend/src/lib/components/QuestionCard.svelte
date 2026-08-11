@@ -2,6 +2,7 @@
 	import type { Question } from '$lib/types';
 	import Option from './question/Option.svelte';
 	import Icon from '@iconify/svelte';
+	import InfoSheet from './InfoSheet.svelte';
 
 	let {
 		question,
@@ -15,8 +16,6 @@
 		onToggle,
 		onCheck,
 		onNext,
-		onHint = () => {},
-		onExplain = () => {},
 		onReport = () => {}
 	}: {
 		question: Question;
@@ -30,13 +29,12 @@
 		onToggle: (id: string) => void;
 		onCheck: () => void;
 		onNext: () => void;
-		onHint?: () => void;
-		onExplain?: () => void;
 		onReport?: () => void;
 	} = $props();
 
 	const hasCorrectAnswers = () => question.answers.length > 0;
-	let lightboxOpen = $state(false);
+	let lightboxSrc = $state<string | null>(null);
+	let hintOpen = $state(false);
 </script>
 
 <div class="flex flex-col h-full overflow-hidden">
@@ -85,7 +83,7 @@
 			{#if question.image}
 				<button
 					type="button"
-					onclick={() => (lightboxOpen = true)}
+					onclick={() => (lightboxSrc = question.image ?? null)}
 					class="block mb-5 cursor-zoom-in focus:outline-none mx-auto"
 					aria-label="Bild vergrößern"
 				>
@@ -95,28 +93,28 @@
 						class="rounded-xl h-28 sm:h-52 w-auto object-contain"
 					/>
 				</button>
+			{/if}
 
-				{#if lightboxOpen}
+			{#if lightboxSrc}
+				<!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+				<div
+					class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
+					onclick={() => (lightboxSrc = null)}
+				>
+					<button
+						type="button"
+						onclick={() => (lightboxSrc = null)}
+						class="absolute top-4 right-4 text-white bg-black/40 hover:bg-black/60 rounded-full w-9 h-9 flex items-center justify-center text-xl leading-none"
+						aria-label="Schließen"
+					>×</button>
 					<!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
-					<div
-						class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
-						onclick={() => (lightboxOpen = false)}
-					>
-						<button
-							type="button"
-							onclick={() => (lightboxOpen = false)}
-							class="absolute top-4 right-4 text-white bg-black/40 hover:bg-black/60 rounded-full w-9 h-9 flex items-center justify-center text-xl leading-none"
-							aria-label="Schließen"
-						>×</button>
-						<!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
-						<img
-							src={question.image}
-							alt="Frage Bild"
-							class="max-w-full max-h-full rounded-xl object-contain shadow-2xl"
-							onclick={(e) => e.stopPropagation()}
-						/>
-					</div>
-				{/if}
+					<img
+						src={lightboxSrc}
+						alt="Vergrößerte Ansicht"
+						class="max-w-full max-h-full rounded-xl object-contain shadow-2xl"
+						onclick={(e) => e.stopPropagation()}
+					/>
+				</div>
 			{/if}
 
 			<div class="space-y-3">
@@ -149,17 +147,16 @@
 		{/if}
 
 		<div class="flex gap-3">
-			<button
-				type="button"
-				onclick={answerChecked ? onExplain : onHint}
-				class="h-10 sm:h-11 px-4 flex items-center gap-2 rounded-lg border-2 border-b-4 border-gray-300 bg-white text-primary hover:bg-gray-50 font-medium text-sm transition-all shrink-0 dm-hint-btn"
-			>
-				<Icon
-					icon={answerChecked ? 'tabler:book-2' : 'tabler:bulb'}
-					class="w-4 h-4"
-				/>
-				<span class="max-sm:hidden">{answerChecked ? 'Erklärung' : 'Hinweis'}</span>
-			</button>
+			{#if !answerChecked && (question.hint || question.hintImage)}
+				<button
+					type="button"
+					onclick={() => (hintOpen = true)}
+					class="h-10 sm:h-11 px-4 flex items-center gap-2 rounded-lg border-2 border-b-4 border-gray-300 bg-white text-primary hover:bg-gray-50 font-medium text-sm transition-all shrink-0 dm-hint-btn"
+				>
+					<Icon icon="tabler:bulb" class="w-4 h-4" />
+					<span class="max-sm:hidden">Hinweis</span>
+				</button>
+			{/if}
 
 			<button
 				onclick={answerChecked ? onNext : onCheck}
@@ -171,3 +168,12 @@
 		</div>
 	</div>
 </div>
+
+<InfoSheet
+	open={hintOpen}
+	title="Hinweis"
+	text={question.hint}
+	image={question.hintImage}
+	onClose={() => (hintOpen = false)}
+	onImageClick={() => (lightboxSrc = question.hintImage ?? null)}
+/>

@@ -7,6 +7,8 @@ export const actions: Actions = {
         const data = await request.formData();
         const text = String(data.get('text') || '').trim();
         const type = String(data.get('type') || 'single_choice');
+        const hint = String(data.get('hint') || '').trim();
+        const explanation = String(data.get('explanation') || '').trim();
 
         // collect options and correctness
         const options: { text: string; is_correct: boolean }[] = [];
@@ -49,19 +51,28 @@ export const actions: Actions = {
             return fail(400, { error: true, message: `Submodule ${params.id} not found` });
         }
 
-        const imageFile = data.get('image');
-        const newImage = imageFile instanceof File && imageFile.size > 0 ? imageFile : null;
+        const newFile = (fieldName: string) => {
+            const file = data.get(fieldName);
+            return file instanceof File && file.size > 0 ? file : null;
+        };
+        const newImage = newFile('question_image');
+        const newHintImage = newFile('hint_image');
+        const newExplanationImage = newFile('explanation_image');
 
         // create question with empty relations first, then fill in once options exist
         let created: any;
         try {
             created = await pbClient.collection('questions').create({
-                text,
+                question: text,
                 type,
+                hint,
+                explanation,
                 submodule: params.id,
                 options: [],
                 answers: [],
-                ...(newImage ? { image: newImage } : {})
+                ...(newImage ? { question_image: newImage } : {}),
+                ...(newHintImage ? { hint_image: newHintImage } : {}),
+                ...(newExplanationImage ? { explanation_image: newExplanationImage } : {})
             });
         } catch (err: any) {
             const message = err?.data ? JSON.stringify(err.data) : err?.message || String(err);

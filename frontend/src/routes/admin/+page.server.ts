@@ -1,4 +1,3 @@
-import { pb } from '$lib/pb';
 import type { PageServerLoad } from './$types';
 
 type ModuleRecord = {
@@ -16,12 +15,12 @@ type SubmoduleRecord = {
 	module: string;
 };
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals }) => {
 	const [modules, submodules] = await Promise.all([
-		pb.collection('modules').getFullList({
+		locals.pb.collection('modules').getFullList({
 			sort: 'title'
 		}),
-		pb.collection('submodules').getFullList({
+		locals.pb.collection('submodules').getFullList({
 			sort: 'title'
 		})
 	]);

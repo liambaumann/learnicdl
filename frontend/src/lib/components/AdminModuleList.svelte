@@ -7,63 +7,40 @@
 </script>
 
 <div>
-    <header class="mb-8 text-left">
+    <header class="mb-8">
         <h1 class="text-2xl md:text-4xl font-bold dm-text">Modul- und Quizübersicht</h1>
         <p class="text-gray-500 dm-text2 mt-2">Willkommen zurück, {user?.name}.</p>
-
-        <div class="mt-6 flex items-center justify-start gap-3 text-sm text-gray-600 dm-text2">
-            <div class="rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-sm dm-card-elev">
-                <div class="font-semibold text-slate-900 dm-text">{modules.length}</div>
-                <div>Module</div>
-            </div>
-            <div class="rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-sm dm-card-elev">
-                <div class="font-semibold text-slate-900 dm-text">{Object.values(submodulesByModule).reduce((c,arr)=>c+arr.length,0)}</div>
-                <div>Quizze</div>
-            </div>
-        </div>
+        <p class="text-sm text-gray-400 dm-text3 mt-4">
+            {modules.length} Module · {Object.values(submodulesByModule).reduce((c, arr) => c + arr.length, 0)} Quizze
+        </p>
     </header>
 
-    <div class="space-y-6">
+    <div class="space-y-8">
         {#each modules as module}
-            <section class="overflow-hidden rounded-2xl border-2 border-gray-200 bg-white shadow-sm dm-card">
-                <div class="flex flex-col gap-4 border-b-2 border-gray-200 p-5 md:flex-row md:items-center md:justify-between dm-border">
-                    <div class="flex items-center gap-4">
-                        <div class="shrink-0 rounded-xl bg-admin-50 p-3 dm-admin-icon-bg">
-                            {#if module.icon}
-                                <img src="/module_icons/{$dark ? 'dark' : 'cyan'}/{module.icon}.svg" alt="{module.title} icon" class="h-12 w-12" />
-                            {:else}
-                                <Icon icon="tabler:stack-2" class="h-12 w-12 text-admin" />
-                            {/if}
-                        </div>
-                        <div>
-                            <h2 class="text-xl md:text-2xl font-bold text-slate-900 dm-text">{module.title}</h2>
-                            <p class="text-sm uppercase tracking-wider text-gray-400 dm-text3">Modul</p>
-                        </div>
+            <section>
+                <div class="flex items-center gap-4 px-3 py-2">
+                    <div class="w-14 h-14 shrink-0 rounded-full bg-primary-100 flex items-center justify-center dm-icon-circle">
+                        {#if module.icon}
+                            <img src="/module_icons/{$dark ? 'dark' : 'cyan'}/{module.icon}.svg" alt="{module.title} icon" class="w-10 h-10" />
+                        {:else}
+                            <Icon icon="tabler:stack-2" class="w-10 h-10 text-primary" />
+                        {/if}
                     </div>
-                    <a href="/module/{module.id}" class="inline-flex items-center gap-2 self-start rounded-xl border-2 border-admin-800 bg-admin px-4 py-2 text-white transition-colors hover:bg-admin-700">
-                        <Icon icon="tabler:eye" class="h-5 w-5" />
-                        Öffnen
-                    </a>
+                    <h2 class="text-lg md:text-xl font-bold text-slate-900 dm-text">{module.title}</h2>
                 </div>
 
-                {#if module.description}
-                    <div class="border-b border-gray-200 px-5 py-4 text-gray-600 dm-text2 dm-border">{module.description}</div>
-                {/if}
-
-                <div class="divide-y divide-gray-200 dm-divide">
+                <div class="mt-1">
                     {#each submodulesByModule[module.id] ?? [] as submodule}
-                        <a href="/admin/quiz/{submodule.id}" class="flex items-center gap-4 px-5 py-4 transition-colors hover:bg-gray-50 dm-hover">
-                            <div class="shrink-0 rounded-lg bg-gray-100 p-2 text-admin dm-admin-icon-bg">
-                                <Icon icon="tabler:checkbox" class="h-6 w-6" />
-                            </div>
-                            <div class="min-w-0 flex-1">
-                                <h3 class="font-semibold text-slate-900 dm-text">{submodule.title}</h3>
-                                <p class="text-xs uppercase tracking-wider text-gray-400 dm-text3">Quiz</p>
-                            </div>
-                            <Icon icon="tabler:chevron-right" class="h-5 w-5 text-gray-300 dm-icon" />
+                        <a
+                            href="/admin/quiz/{submodule.id}"
+                            class="flex items-center gap-3 rounded-lg px-3 py-2.5 pl-8 transition-colors hover:bg-slate-50 group dm-hover"
+                        >
+                            <Icon icon="tabler:checkbox" class="h-5 w-5 text-admin shrink-0" />
+                            <span class="flex-1 text-slate-700 dm-text2">{submodule.title}</span>
+                            <Icon icon="tabler:chevron-right" class="w-4 h-4 text-slate-300 group-hover:text-primary transition-colors dm-icon" />
                         </a>
                     {:else}
-                        <div class="px-5 py-6 text-gray-500 dm-text2">Keine Quizze in diesem Modul.</div>
+                        <p class="px-3 py-2 pl-8 text-sm text-gray-400 dm-text3">Keine Quizze in diesem Modul.</p>
                     {/each}
                 </div>
             </section>

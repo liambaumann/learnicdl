@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev:backend": "cd backend && ./pocketbase serve",
     "dev:frontend": "cd frontend && pnpm dev",
-    "dev": "run-p dev:*"
+    "dev": "run-p dev:backend dev:frontend",
+    "dev:lan:frontend": "cd frontend && pnpm dev:lan",
+    "dev:lan": "run-p dev:backend dev:lan:frontend"
   },
   "keywords": [],
   "author": "",

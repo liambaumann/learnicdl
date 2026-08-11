@@ -16,6 +16,14 @@
 - `cd backend && ./pocketbase serve`
 - http://127.0.0.1:8090/_/ (im Browser, login mit superuser)
 
+### Im Netzwerk starten (z.B. Zugriff vom Handy)
+- `pnpm dev:lan` startet backend + frontend, Frontend ist zusätzlich im lokalen Netzwerk erreichbar (via `vite dev --host`)
+- `http://192.168.x.x:5173/` auf dem Handy öffnen (gleiches WLAN)
+- PocketBase selbst lauscht weiterhin nur auf `127.0.0.1` (nicht direkt im Netzwerk erreichbar). Ausnahme: Fragen-Bilder werden über einen Vite-Proxy (`/api/files` → `127.0.0.1:8090`) ausgeliefert, damit sie auf dem Handy laden und leitet nur `/api/files` weiter, nicht die gesamte PocketBase-API
+
+## Datenmodell
+Aktuelle Collections/Felder: PocketBase Admin UI (`http://127.0.0.1:8090/_/`) einsehbar.
+
 ## Zugang erstellen (app user)
 - PocketBase admin UI → `users` collection → new/edit record → set email + password + role
 - oder import `backend/csv_imports/test_users.csv` (altes Beispiel zum testen, password schon hashed)

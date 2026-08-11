@@ -1,5 +1,8 @@
 node_modules
 
+# npm (project uses pnpm — see root package.json "packageManager")
+package-lock.json
+
 # Output
 .output
 .vercel

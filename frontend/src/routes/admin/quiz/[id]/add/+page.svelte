@@ -33,6 +33,7 @@
 <div class="max-w-4xl mx-auto p-6">
     <div class="mb-4">
         <h1 class="text-2xl font-bold">Add Question</h1>
+        <p class="text-xs text-gray-400 mt-1">* required field</p>
     </div>
 
     {#if succeeded}
@@ -50,7 +51,7 @@
             {/if}
 
             <div>
-                <label class="block text-sm font-medium">Question Text</label>
+                <label class="block text-sm font-medium">Question Text *</label>
                 <input name="text" required class="w-full border border-gray-200 rounded px-3 py-2 shadow-sm" />
             </div>
 
@@ -63,9 +64,29 @@
             </div>
 
             <div>
-            <p class="block text-sm font-medium mb-1">Image</p>
-            <ImageUploadField />
-        </div>
+                <p class="block text-sm font-medium mb-1">Image</p>
+                <ImageUploadField name="question_image" />
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium">Hint</label>
+                <textarea name="hint" rows="2" class="w-full border border-gray-200 rounded px-3 py-2 shadow-sm"></textarea>
+            </div>
+
+            <div>
+                <p class="block text-sm font-medium mb-1">Hint Image</p>
+                <ImageUploadField name="hint_image" />
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium">Explanation</label>
+                <textarea name="explanation" rows="2" class="w-full border border-gray-200 rounded px-3 py-2 shadow-sm"></textarea>
+            </div>
+
+            <div>
+                <p class="block text-sm font-medium mb-1">Explanation Image</p>
+                <ImageUploadField name="explanation_image" />
+            </div>
 
         <fieldset class="mt-2">
                 <legend class="font-medium mb-2">Answer Options (all required)</legend>
