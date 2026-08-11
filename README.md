@@ -5,7 +5,7 @@
 - `frontend/` SvelteKit app, kommuniziert mit PocketBase via JS SDK (`pocketbase`), cookie-based auth (`hooks.server.ts`), "sichere" Frontend-Admin UI (derzeit nur für Fragen anlegen und bearbeiten)
 
 ## Starten
-- `pnpm install` (braucht root)
+- `pnpm install`
 - `pnpm dev` startet backend + frontend parallel
 
 ### Nur Frontend starten
