@@ -3,9 +3,6 @@
 /backend/pocketbase
 /backend/pocketbase.exe
 
-# npm
-pnpm-lock.yaml
-
 #other
 tools/
 node_modules/
