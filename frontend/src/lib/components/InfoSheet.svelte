@@ -53,7 +53,7 @@
 			{/if}
 
 			{#if text}
-				<div class="text-gray-700 dm-text2 leading-relaxed">{@html text}</div>
+				<div class="richtext text-gray-700 dm-text2 leading-relaxed">{@html text}</div>
 			{/if}
 		</div>
 	</div>

@@ -1,6 +1,7 @@
 import { pb } from '$lib/pb';
 import { fail, error } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
+import { readQuestionFormFields, validateQuestionForm, extractFile, formatPbError } from '$lib/server/questionForm';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
     const pbClient = locals.pb || pb;
@@ -35,10 +36,7 @@ export const actions: Actions = {
         }
 
         const data = await request.formData();
-        const text = String(data.get('text') || '').trim();
-        const type = String(data.get('type') || 'single_choice');
-        const hint = String(data.get('hint') || '').trim();
-        const explanation = String(data.get('explanation') || '').trim();
+        const { text, type, hint, explanation } = readQuestionFormFields(data);
 
         // option IDs are passed as hidden inputs so we don't need an extra DB read
         const optionIds: string[] = [];
@@ -47,36 +45,22 @@ export const actions: Actions = {
             if (id) optionIds.push(String(id));
         }
 
-        const optionTexts = optionIds.map((_, i) =>
-            String(data.get(`option_text_${i}`) || '').trim()
-        );
+        const options = optionIds.map((_, i) => ({
+            text: String(data.get(`option_text_${i}`) || '').trim(),
+            is_correct:
+                type === 'single_choice'
+                    ? String(data.get('correct')) === String(i)
+                    : data.get(`correct_${i}`) === 'on'
+        }));
 
-        let correctIds: string[];
-        if (type === 'single_choice') {
-            const correctId = data.get('correct');
-            correctIds = correctId ? [String(correctId)] : [];
-        } else {
-            correctIds = optionIds.filter((id) => data.get(`correct_${id}`) === 'on');
-        }
-
-        // --- validate before touching the DB ---
-        if (!text) {
-            return fail(400, { error: true, message: 'Question text is required.' });
-        }
-        if (optionIds.length !== 4 || optionTexts.some((t) => !t)) {
-            return fail(400, { error: true, message: 'All four options must have text.' });
-        }
-        if (type === 'single_choice' && correctIds.length !== 1) {
-            return fail(400, { error: true, message: 'Single choice must have exactly one correct answer.' });
-        }
-        if (type === 'multiple_choice' && correctIds.length === 0) {
-            return fail(400, { error: true, message: 'At least one option must be marked correct.' });
+        const validationError = validateQuestionForm({ text, type, options });
+        if (validationError) {
+            return fail(400, { error: true, message: validationError });
         }
 
         const fileUpdate = (fieldName: string) => {
-            const file = data.get(fieldName);
+            const newFile = extractFile(data, fieldName);
             const remove = data.get(`remove_${fieldName}`) === '1';
-            const newFile = file instanceof File && file.size > 0 ? file : null;
             return newFile ? { [fieldName]: newFile } : remove ? { [fieldName]: null } : {};
         };
 
@@ -86,7 +70,7 @@ export const actions: Actions = {
                 type,
                 hint,
                 explanation,
-                answers: correctIds,
+                answers: optionIds.filter((_, i) => options[i].is_correct),
                 ...fileUpdate('question_image'),
                 ...fileUpdate('hint_image'),
                 ...fileUpdate('explanation_image')
@@ -94,13 +78,12 @@ export const actions: Actions = {
 
             for (let i = 0; i < optionIds.length; i++) {
                 await pbClient.collection('question_options').update(optionIds[i], {
-                    text: optionTexts[i],
-                    is_correct: correctIds.includes(optionIds[i])
+                    text: options[i].text,
+                    is_correct: options[i].is_correct
                 });
             }
         } catch (err: any) {
-            const message = err?.data ? JSON.stringify(err.data) : err?.message || String(err);
-            return fail(400, { error: true, message: `Failed to update: ${message}` });
+            return fail(400, { error: true, message: `Failed to update: ${formatPbError(err)}` });
         }
 
         return { success: true };

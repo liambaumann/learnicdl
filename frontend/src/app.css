@@ -146,6 +146,15 @@ html.dark .dm-hint-btn:hover { background-color: #263548 !important; }
 html.dark .dm-feedback-ok   { color: #86efac; }
 html.dark .dm-feedback-err  { color: #fca5a5; }
 
+/* ── Admin forms ───────────────────────────────────────────────────────── */
+
+html.dark .dm-btn-danger {
+    background-color: #1a2332 !important;
+    border-color: #7f1d1d !important;
+    color: #fca5a5 !important;
+}
+html.dark .dm-btn-danger:hover { background-color: #2a1a1f !important; }
+
 /* ── Quiz Result ───────────────────────────────────────────────────────── */
 
 html.dark .dm-result-bg { background-color: #0f1419 !important; }
@@ -217,3 +226,146 @@ html.dark .dm-admin-icon-bg { background-color: #1a2332 !important; }
 /* ── Module icon circle ─────────────────────────────────────────────────── */
 
 html.dark .dm-icon-circle { background-color: rgba(30, 111, 176, 0.15) !important; }
+
+/* ── Legacy content hue classes ────────────────────────────────────────────
+   Used inside question/hint/explanation HTML pulled in via {@html} (see
+   backend/data-import/legacy-2026/lib/html.mjs) to replace hardcoded inline
+   text colors with theme-aware ones. Also the only palette the admin rich
+   text editor's Hue mark can produce (see lib/tiptap/hue-mark.ts) — the
+   --hue-* custom properties are its single source of truth for swatch
+   colors too. Must be plain global CSS, not Tailwind utilities (Tailwind's
+   JIT scanner never sees class names that only exist inside runtime
+   database HTML strings) and not Svelte-scoped styles (the scoping hash
+   wouldn't match content injected via {@html}). font-weight is set here
+   too so color is never the only signal carrying meaning.
+   ───────────────────────────────────────────────────────────────────────── */
+
+:root {
+    --hue-red: #e71313;
+    --hue-orange: #af640e;
+    --hue-yellow: #7f760a;
+    --hue-green: #0b8920;
+    --hue-blue: #3e6aef;
+    --hue-purple: #cb10cb;
+    --hue-gray: #737373;
+}
+
+html.dark {
+    --hue-red: #f04747;
+    --hue-orange: #cb7410;
+    --hue-yellow: #92870c;
+    --hue-green: #0d9c24;
+    --hue-blue: #5a80f2;
+    --hue-purple: #e713e7;
+    --hue-gray: #878787;
+}
+
+.hue-red    { color: var(--hue-red); font-weight: 500; }
+.hue-orange { color: var(--hue-orange); font-weight: 500; }
+.hue-yellow { color: var(--hue-yellow); font-weight: 500; }
+.hue-green  { color: var(--hue-green); font-weight: 500; }
+.hue-blue   { color: var(--hue-blue); font-weight: 500; }
+.hue-purple { color: var(--hue-purple); font-weight: 500; }
+.hue-gray   { color: var(--hue-gray); font-weight: 500; }
+
+/* ── RichTextEditor.svelte chrome ──────────────────────────────────────────
+   Plain global CSS rather than the component's scoped <style>: the toolbar
+   classes are forwarded as a prop into svelte-tiptap's EditorContent child
+   component, and the dark-mode overrides use an `html.dark` ancestor —
+   neither is something Svelte's scoped-style pruner can see as "used" from
+   inside RichTextEditor.svelte, so this follows the same dm-* convention as
+   the rest of this file instead of fighting the pruner.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.rte-content .tiptap {
+    min-height: 4.5rem;
+    padding: 0.5rem 0.75rem;
+    outline: none;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.rte-content .tiptap p {
+    margin: 0;
+}
+
+/* Shared with .richtext (InfoSheet's {@html} render target) so lists look
+   identical in the editor and in the rendered hint/explanation output. */
+.rte-content .tiptap ul,
+.rte-content .tiptap ol,
+.richtext ul,
+.richtext ol {
+    padding-left: 1.25rem;
+    margin: 0.25rem 0;
+}
+
+.rte-content .tiptap ul,
+.richtext ul {
+    list-style: disc;
+}
+
+.rte-content .tiptap ol,
+.richtext ol {
+    list-style: decimal;
+}
+
+.rte-content .tiptap li,
+.richtext li {
+    margin: 0.15rem 0;
+}
+
+.rte-content .tiptap li p,
+.richtext li p {
+    margin: 0;
+}
+
+.rte-toolbar {
+    background-color: #f8fafc; /* slate-50 */
+}
+
+.rte-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 0.375rem;
+    color: #64748b; /* slate-500 */
+}
+
+.rte-btn:hover {
+    background-color: #e2e8f0; /* slate-200 */
+}
+
+.rte-btn-active {
+    background-color: var(--color-admin-100);
+    color: var(--color-admin-700);
+}
+
+.rte-sep {
+    width: 1px;
+    height: 1.25rem;
+    margin: 0 0.25rem;
+    background-color: #cbd5e1; /* slate-300 */
+}
+
+.rte-swatch {
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    cursor: pointer;
+}
+
+.rte-swatch-active {
+    border-color: currentColor;
+    outline: 1px solid #cbd5e1; /* slate-300 */
+    outline-offset: 1px;
+}
+
+html.dark .rte-toolbar { background-color: #161d27; }
+html.dark .rte-btn { color: #94a3b8; }
+html.dark .rte-btn:hover { background-color: #1e2a3a; }
+html.dark .rte-btn-active { background-color: #1a2332; color: #5a80f2; }
+html.dark .rte-sep { background-color: #334155; }
+html.dark .rte-swatch-active { outline-color: #334155; }

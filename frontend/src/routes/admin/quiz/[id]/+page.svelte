@@ -11,7 +11,7 @@
             <h1 class="text-2xl font-bold dm-text">Quiz: {data.submodule.title}</h1>
             <p class="text-sm text-gray-500 dm-text2">{data.submodule.description}</p>
         </div>
-        <a href="/admin/quiz/{data.submodule.id}/add" class="rounded-lg btn-admin text-white px-4 py-2">Add Question</a>
+        <a href="/admin/quiz/{data.submodule.id}/add" class="inline-flex items-center justify-center h-10 sm:h-11 px-8 rounded-lg border-2 border-b-4 border-admin-800 btn-admin text-white text-base font-semibold transition-colors">Add Question</a>
     </div>
 
     <div class="bg-white border-2 border-gray-200 rounded-xl overflow-hidden dm-card">
@@ -35,7 +35,13 @@
                         <a href="/admin/question/{q.id}" class="text-gray-400 hover:text-gray-600 dm-icon dm-icon-close">
                             <Icon icon="tabler:edit" class="w-5 h-5" />
                         </a>
-                        <form method="POST" action={`/admin/quiz/${data.submodule.id}/delete`} on:submit={(e) => { if (!confirm('Delete this question?')) e.preventDefault(); }}>
+                        <form method="POST" action={`/admin/quiz/${data.submodule.id}/delete`} on:submit={(e) => {
+                            const optionCount = data.optionCounts[q.id] ?? 0;
+                            const msg = optionCount
+                                ? `Delete this question and its ${optionCount} answer option${optionCount === 1 ? '' : 's'}?`
+                                : 'Delete this question?';
+                            if (!confirm(msg)) e.preventDefault();
+                        }}>
                             <input type="hidden" name="questionId" value={q.id} />
                             <button type="submit" name="_action" value="delete" class="text-red-500 hover:text-red-700">
                                 <Icon icon="tabler:trash" class="w-5 h-5" />

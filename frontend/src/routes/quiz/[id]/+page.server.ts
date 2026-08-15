@@ -7,6 +7,8 @@ type RawQuestion = {
     question_image?: string;
     hint?: string;
     hint_image?: string;
+    explanation?: string;
+    explanation_image?: string;
 };
 
 type RawQuestionOption = {
@@ -66,7 +68,9 @@ export const load: PageServerLoad = async ({ params, locals }) => {
             answers,
             ...(q.question_image && { image: `/api/files/pbc_4009210445/${q.id}/${q.question_image}` }),
             ...(q.hint && { hint: q.hint }),
-            ...(q.hint_image && { hintImage: `/api/files/pbc_4009210445/${q.id}/${q.hint_image}` })
+            ...(q.hint_image && { hintImage: `/api/files/pbc_4009210445/${q.id}/${q.hint_image}` }),
+            ...(q.explanation && { explanation: q.explanation }),
+            ...(q.explanation_image && { explanationImage: `/api/files/pbc_4009210445/${q.id}/${q.explanation_image}` })
         };
     });
 

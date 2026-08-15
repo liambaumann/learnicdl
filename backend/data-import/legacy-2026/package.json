@@ -1,0 +1,15 @@
+{
+  "name": "legacy-2026-import",
+  "private": true,
+  "type": "module",
+  "description": "One-time import of the legacy H2-backed question bank (QUESTION/GRAPHIC/POOL/LESSON) into this repo's PocketBase backend. See README.md before running anything.",
+  "scripts": {
+    "audit": "node audit.mjs",
+    "import": "node import.mjs"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.3.0",
+    "csv-parse": "^7.0.2",
+    "sharp": "^0.35.3"
+  }
+}

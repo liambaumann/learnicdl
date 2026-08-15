@@ -8,3 +8,5 @@ tools/
 node_modules/
 .DS_Store
 /backend/backup/
+.claude/
+CLAUDE.md

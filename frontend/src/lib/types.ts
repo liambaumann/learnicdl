@@ -13,4 +13,6 @@ export interface Question {
 	image?: string;
 	hint?: string;
 	hintImage?: string;
+	explanation?: string;
+	explanationImage?: string;
 }

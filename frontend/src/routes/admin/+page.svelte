@@ -5,4 +5,10 @@
     let { data }: { data: PageData } = $props();
 </script>
 
-<AdminModuleList modules={data.modules} submodulesByModule={data.submodulesByModule} user={data.user} />
+<AdminModuleList
+    modules={data.modules}
+    submodulesByModule={data.submodulesByModule}
+    questionCountBySubmodule={data.questionCountBySubmodule}
+    optionCountBySubmodule={data.optionCountBySubmodule}
+    user={data.user}
+/>

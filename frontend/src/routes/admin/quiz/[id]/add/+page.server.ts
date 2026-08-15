@@ -1,43 +1,25 @@
 import { pb } from '$lib/pb';
 import { fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
+import { readQuestionFormFields, validateQuestionForm, extractFile, formatPbError } from '$lib/server/questionForm';
 
 export const actions: Actions = {
     default: async ({ request, params, locals }) => {
         const data = await request.formData();
-        const text = String(data.get('text') || '').trim();
-        const type = String(data.get('type') || 'single_choice');
-        const hint = String(data.get('hint') || '').trim();
-        const explanation = String(data.get('explanation') || '').trim();
+        const { text, type, hint, explanation } = readQuestionFormFields(data);
 
-        // collect options and correctness
-        const options: { text: string; is_correct: boolean }[] = [];
-        if (type === 'single_choice') {
-            const correctIndex = data.get('correct');
-            for (let i = 0; i < 4; i++) {
-                const optText = String(data.get(`option_${i}`) || '').trim();
-                options.push({ text: optText, is_correct: String(correctIndex) === String(i) });
-            }
-        } else {
-            for (let i = 0; i < 4; i++) {
-                const optText = String(data.get(`option_${i}`) || '').trim();
-                options.push({ text: optText, is_correct: data.get(`correct_${i}`) === 'on' });
-            }
-        }
+        const options = Array.from({ length: 4 }, (_, i) => ({
+            text: String(data.get(`option_text_${i}`) || '').trim(),
+            is_correct:
+                type === 'single_choice'
+                    ? String(data.get('correct')) === String(i)
+                    : data.get(`correct_${i}`) === 'on'
+        }));
 
         // --- validate everything before touching the DB ---
-        if (!text) {
-            return fail(400, { error: true, message: 'Question text is required.' });
-        }
-        if (options.some((o) => !o.text)) {
-            return fail(400, { error: true, message: 'All four answer options must have text.' });
-        }
-        const correctCount = options.filter((o) => o.is_correct).length;
-        if (type === 'single_choice' && correctCount !== 1) {
-            return fail(400, { error: true, message: 'Single choice questions must have exactly one correct option.' });
-        }
-        if (type === 'multiple_choice' && correctCount === 0) {
-            return fail(400, { error: true, message: 'At least one option must be marked correct.' });
+        const validationError = validateQuestionForm({ text, type, options });
+        if (validationError) {
+            return fail(400, { error: true, message: validationError });
         }
 
         const pbClient = locals.pb || pb;
@@ -51,13 +33,9 @@ export const actions: Actions = {
             return fail(400, { error: true, message: `Submodule ${params.id} not found` });
         }
 
-        const newFile = (fieldName: string) => {
-            const file = data.get(fieldName);
-            return file instanceof File && file.size > 0 ? file : null;
-        };
-        const newImage = newFile('question_image');
-        const newHintImage = newFile('hint_image');
-        const newExplanationImage = newFile('explanation_image');
+        const newImage = extractFile(data, 'question_image');
+        const newHintImage = extractFile(data, 'hint_image');
+        const newExplanationImage = extractFile(data, 'explanation_image');
 
         // create question with empty relations first, then fill in once options exist
         let created: any;
@@ -75,8 +53,7 @@ export const actions: Actions = {
                 ...(newExplanationImage ? { explanation_image: newExplanationImage } : {})
             });
         } catch (err: any) {
-            const message = err?.data ? JSON.stringify(err.data) : err?.message || String(err);
-            return fail(400, { error: true, message: `Failed to create question: ${message}` });
+            return fail(400, { error: true, message: `Failed to create question: ${formatPbError(err)}` });
         }
 
         // create options one by one, cleaning up on any failure
@@ -96,8 +73,7 @@ export const actions: Actions = {
                 await pbClient.collection('question_options').delete(opt.id).catch(() => {});
             }
             await pbClient.collection('questions').delete(created.id).catch(() => {});
-            const message = err?.data ? JSON.stringify(err.data) : err?.message || String(err);
-            return fail(400, { error: true, message: `Failed to create options: ${message}` });
+            return fail(400, { error: true, message: `Failed to create options: ${formatPbError(err)}` });
         }
 
         // update question with real relation IDs
@@ -106,8 +82,7 @@ export const actions: Actions = {
             const answerIds = createdOptions.filter((_, i) => options[i].is_correct).map((o) => o.id);
             await pbClient.collection('questions').update(created.id, { options: optionIds, answers: answerIds });
         } catch (err: any) {
-            const message = err?.data ? JSON.stringify(err.data) : err?.message || String(err);
-            return fail(400, { error: true, message: `Failed to link options to question: ${message}` });
+            return fail(400, { error: true, message: `Failed to link options to question: ${formatPbError(err)}` });
         }
 
         return { success: true, quizId: params.id };

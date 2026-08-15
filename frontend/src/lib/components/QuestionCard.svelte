@@ -35,6 +35,7 @@
 	const hasCorrectAnswers = () => question.answers.length > 0;
 	let lightboxSrc = $state<string | null>(null);
 	let hintOpen = $state(false);
+	let explainOpen = $state(false);
 </script>
 
 <div class="flex flex-col h-full overflow-hidden">
@@ -158,6 +159,17 @@
 				</button>
 			{/if}
 
+			{#if answerChecked && (question.explanation || question.explanationImage)}
+				<button
+					type="button"
+					onclick={() => (explainOpen = true)}
+					class="h-10 sm:h-11 px-4 flex items-center gap-2 rounded-lg border-2 border-b-4 border-gray-300 bg-white text-primary hover:bg-gray-50 font-medium text-sm transition-all shrink-0 dm-hint-btn"
+				>
+					<Icon icon="tabler:book-2" class="w-4 h-4" />
+					<span class="max-sm:hidden">Erklärung</span>
+				</button>
+			{/if}
+
 			<button
 				onclick={answerChecked ? onNext : onCheck}
 				disabled={!answerChecked && selected.length === 0 && hasCorrectAnswers()}
@@ -176,4 +188,13 @@
 	image={question.hintImage}
 	onClose={() => (hintOpen = false)}
 	onImageClick={() => (lightboxSrc = question.hintImage ?? null)}
+/>
+
+<InfoSheet
+	open={explainOpen}
+	title="Erklärung"
+	text={question.explanation}
+	image={question.explanationImage}
+	onClose={() => (explainOpen = false)}
+	onImageClick={() => (lightboxSrc = question.explanationImage ?? null)}
 />
