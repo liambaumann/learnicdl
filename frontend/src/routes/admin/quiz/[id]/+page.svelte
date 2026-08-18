@@ -1,14 +1,42 @@
 <script lang="ts">
     import type { PageData } from './$types';
     import Icon from '@iconify/svelte';
+    import ConfirmDialog from '$lib/components/ConfirmDialog.svelte';
 
     let { data }: { data: PageData } = $props();
+
+    let deleteForms: Record<string, HTMLFormElement> = {};
+    let pendingDeleteId: string | null = $state(null);
+
+    function escapeHtml(str: string) {
+        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    let deleteMessage = $derived.by(() => {
+        if (!pendingDeleteId) return '';
+        const q = data.questions.find((q: { id: string; question: string }) => q.id === pendingDeleteId);
+        const optionCount = data.optionCounts[pendingDeleteId] ?? 0;
+        const questionText = escapeHtml(q?.question ?? '');
+        return optionCount
+            ? `„<strong>${questionText}</strong>“ mit <strong>${optionCount} Antwortoption${optionCount === 1 ? '' : 'en'}</strong> unwiderruflich löschen?`
+            : `„<strong>${questionText}</strong>“ unwiderruflich löschen?`;
+    });
+
+    function confirmDelete() {
+        if (!pendingDeleteId) return;
+        const id = pendingDeleteId;
+        pendingDeleteId = null;
+        deleteForms[id]?.requestSubmit();
+    }
 </script>
 
 <div class="max-w-4xl mx-auto p-6">
     <div class="flex items-center justify-between mb-6">
         <div>
-            <h1 class="text-2xl font-bold dm-text">Quiz: {data.submodule.title}</h1>
+            <h1 class="text-2xl font-bold dm-text">
+                Quiz: {data.submodule.title}
+                <span class="ml-2 text-xs font-normal text-gray-400 dm-text3">{data.submodule.id}</span>
+            </h1>
             <p class="text-sm text-gray-500 dm-text2">{data.submodule.description}</p>
         </div>
         <a href="/admin/quiz/{data.submodule.id}/add" class="inline-flex items-center justify-center h-10 sm:h-11 px-8 rounded-lg border-2 border-b-4 border-admin-800 btn-admin text-white text-base font-semibold transition-colors">Add Question</a>
@@ -35,15 +63,19 @@
                         <a href="/admin/question/{q.id}" class="text-gray-400 hover:text-gray-600 dm-icon dm-icon-close">
                             <Icon icon="tabler:edit" class="w-5 h-5" />
                         </a>
-                        <form method="POST" action={`/admin/quiz/${data.submodule.id}/delete`} on:submit={(e) => {
-                            const optionCount = data.optionCounts[q.id] ?? 0;
-                            const msg = optionCount
-                                ? `Delete this question and its ${optionCount} answer option${optionCount === 1 ? '' : 's'}?`
-                                : 'Delete this question?';
-                            if (!confirm(msg)) e.preventDefault();
-                        }}>
+                        <form
+                            method="POST"
+                            action={`/admin/quiz/${data.submodule.id}/delete`}
+                            bind:this={deleteForms[q.id]}
+                        >
                             <input type="hidden" name="questionId" value={q.id} />
-                            <button type="submit" name="_action" value="delete" class="text-red-500 hover:text-red-700">
+                            <input type="hidden" name="_action" value="delete" />
+                            <button
+                                type="button"
+                                onclick={() => (pendingDeleteId = q.id)}
+                                class="text-red-500 hover:text-red-700"
+                                aria-label="Frage löschen"
+                            >
                                 <Icon icon="tabler:trash" class="w-5 h-5" />
                             </button>
                         </form>
@@ -55,3 +87,13 @@
         {/if}
     </div>
 </div>
+
+<ConfirmDialog
+    open={pendingDeleteId !== null}
+    title="Frage unwiderruflich löschen"
+    message={deleteMessage}
+    confirmLabel="Löschen"
+    cancelLabel="Abbrechen"
+    onConfirm={confirmDelete}
+    onCancel={() => (pendingDeleteId = null)}
+/>

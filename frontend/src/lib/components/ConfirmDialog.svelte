@@ -32,7 +32,12 @@
 			onclick={(e) => e.stopPropagation()}
 		>
 			<div class="flex items-center justify-between mb-3">
-				<h3 class="text-lg font-bold text-gray-900 dm-text">{title}</h3>
+				<div class="flex items-center gap-2">
+					<div class="w-9 h-9 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+						<Icon icon="tabler:alert-triangle" class="w-5 h-5 text-red-600" />
+					</div>
+					<h3 class="text-lg font-bold text-red-700 dm-text">{title}</h3>
+				</div>
 				<button
 					type="button"
 					onclick={onCancel}
@@ -43,7 +48,7 @@
 				</button>
 			</div>
 
-			<p class="text-sm text-gray-700 dm-text2 leading-relaxed mb-5">{message}</p>
+			<p class="text-sm text-gray-700 dm-text2 leading-relaxed mb-5">{@html message}</p>
 
 			<div class="flex justify-end gap-3">
 				<button
@@ -56,7 +61,7 @@
 				<button
 					type="button"
 					onclick={onConfirm}
-					class="px-4 py-2 rounded-lg border border-red-200 text-red-500 bg-white hover:bg-red-50 font-medium text-sm transition-colors dm-btn-danger"
+					class="px-4 py-2 rounded-lg border-2 border-b-4 border-red-800 bg-red-600 text-white hover:bg-red-700 font-bold text-sm transition-colors"
 				>
 					{confirmLabel}
 				</button>

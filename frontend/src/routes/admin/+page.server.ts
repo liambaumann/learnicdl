@@ -17,8 +17,10 @@ type SubmoduleRecord = {
 	module: string;
 };
 
-export const load: PageServerLoad = async ({ locals }) => {
-	const [modules, submodules, questions] = await Promise.all([
+export const load: PageServerLoad = async ({ locals, url }) => {
+	const q = url.searchParams.get('q')?.trim() || '';
+
+	const [modules, submodules, questions, matches] = await Promise.all([
 		locals.pb.collection('modules').getFullList({
 			sort: 'title'
 		}),
@@ -27,7 +29,13 @@ export const load: PageServerLoad = async ({ locals }) => {
 		}),
 		locals.pb.collection('questions').getFullList({
 			fields: 'id,submodule'
-		})
+		}),
+		q
+			? locals.pb.collection('questions').getFullList({
+					filter: locals.pb.filter('question ~ {:q}', { q }),
+					fields: 'id,submodule'
+				})
+			: Promise.resolve(null)
 	]);
 
 	const submodulesByModule = new Map<string, SubmoduleRecord[]>();
@@ -38,34 +46,22 @@ export const load: PageServerLoad = async ({ locals }) => {
 		submodulesByModule.set(submodule.module, grouped);
 	}
 
-	// Question + answer-option counts per submodule, for the delete-confirmation
-	// warning - two batched queries total, not one per submodule.
+	// Question count per submodule, for the delete-confirmation warning.
 	const questionCountBySubmodule: Record<string, number> = {};
-	const submoduleByQuestion: Record<string, string> = {};
 	for (const q of questions as { id: string; submodule: string }[]) {
 		questionCountBySubmodule[q.submodule] = (questionCountBySubmodule[q.submodule] ?? 0) + 1;
-		submoduleByQuestion[q.id] = q.submodule;
 	}
 
-	const optionCountBySubmodule: Record<string, number> = {};
-	if (questions.length) {
-		const filter = (questions as { id: string }[]).map((q) => `question = "${q.id}"`).join(' || ');
-		const options = await locals.pb.collection('question_options').getFullList({
-			filter,
-			fields: 'question'
-		});
-		for (const o of options as { question: string }[]) {
-			const submoduleId = submoduleByQuestion[o.question];
-			if (!submoduleId) continue;
-			optionCountBySubmodule[submoduleId] = (optionCountBySubmodule[submoduleId] ?? 0) + 1;
-		}
-	}
+	const matchingSubmoduleIds = matches
+		? Array.from(new Set((matches as { id: string; submodule: string }[]).map((m) => m.submodule)))
+		: null;
 
 	return {
 		modules: modules as ModuleRecord[],
 		submodulesByModule: Object.fromEntries(submodulesByModule),
 		questionCountBySubmodule,
-		optionCountBySubmodule
+		searchQuery: q,
+		matchingSubmoduleIds
 	};
 };
 

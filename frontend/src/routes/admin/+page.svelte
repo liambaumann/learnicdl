@@ -9,6 +9,7 @@
     modules={data.modules}
     submodulesByModule={data.submodulesByModule}
     questionCountBySubmodule={data.questionCountBySubmodule}
-    optionCountBySubmodule={data.optionCountBySubmodule}
     user={data.user}
+    searchQuery={data.searchQuery}
+    matchingSubmoduleIds={data.matchingSubmoduleIds}
 />

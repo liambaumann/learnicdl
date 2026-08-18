@@ -24,6 +24,32 @@
 ## Datenmodell
 Aktuelle Collections/Felder: PocketBase Admin UI (`http://127.0.0.1:8090/_/`) einsehbar.
 
+### Fragen aus alter DB importieren
+```bash
+# 2. Dry run the import for one specific lesson (no writes). Find the
+# LESSON.ID and the PocketBase module id you want it under first:
+grep -a '"<lesson name>"' lesson.csv    # find its LESSON.ID
+
+# look up the target module's PocketBase record id in the admin UI
+node import.mjs --lesson=<LEGACY LESSON.ID> --module=<PocketBase module id>
+```
+PocketBase Modul id laesst sich neben dem Titel in der Modul/Quizübersicht im Admin-Panel ablesen!
+für Modul Computer Grundlagen 2, sieht ein dry run so aus:
+```bash
+node import.mjs --lesson=1605794091000 --module=97ff2q5eqjzhpwi
+```
+Mit `--commit` werden die Fragen tatsaechlich geschrieben.:
+```bash
+node import.mjs --lesson=1605794091000 --module=97ff2q5eqjzhpwi --commit
+```
+Dafür benötigt es allerdings einen PocketBase superuser, diesen muss man vorher angelegt haben, sowie als Umgebungsvariable setzen; z.B. in bash:
+```bash
+export PB_EMAIL=<superuser email>
+export PB_PASSWORD=<superuser password>
+```
+siehe [./backend/data-import/legacy-2026/README.md](./backend/data-import/legacy-2026/README.md) für Details.
+
+
 ## Zugang erstellen (app user)
 - PocketBase admin UI → `users` collection → new/edit record → set email + password + role
 - oder import `backend/csv_imports/test_users.csv` (altes Beispiel zum testen, password schon hashed)
